@@ -1,33 +1,43 @@
-% secdoc.tex V2.0, 28 June 2010
+%%
+%% Copyright 2007, 2008, 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
 
-\documentclass[times]{secauth}
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%%
+%%
+%% $Id: elsarticle-template-num.tex 4 2009-10-24 08:22:58Z rishi $
+%%
+%%
+\documentclass[preprint,12pt,3p]{elsarticle}
 
-\usepackage{moreverb}
-\usepackage{graphics}
-\usepackage{algorithm}
-\usepackage{algorithmic}
-\usepackage{epsfig}
-\usepackage{epstopdf}
-\usepackage{pifont, footnote}
 \usepackage{color}
 \usepackage{listings}
-\usepackage{array}
-\usepackage{subfig}
-%\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{subfigure}
 
 \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
 
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
-
 \newcommand{\DSVMP}{\textsc{Dsvmp }}
 \newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
-
 \newcommand\FIXME[1]{\textcolor{red}{FIX:}\textcolor{red}{#1}}
-
-\newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
-T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
 \lstdefinelanguage
    [x64]{Assembler}     % add a "x64" dialect of Assembler
    [x86masm]{Assembler} % based on the "x86masm" dialect
@@ -63,38 +73,106 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 }
 \lstset{style=mystyle}
 
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
 
-\def\volumeyear{2010}
-%\def\baselinestretch{2}
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+%% \usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+
+\journal{Nuclear Physics B}
 
 \begin{document}
 
-\runningheads{A. N. Other, et al.}{Exploiting Dynamic Scheduling for VM-Based Code Obfuscation}
+\begin{frontmatter}
 
-\articletype{RESEARCH ARTICLE}
+\title{Exploiting Dynamic Scheduling for VM-Based Code Obfuscation}
+%\tnotetext[label0]{This is only an example}
 
-\title{Exploiting Dynamic Scheduling for VM-Based Code Obfuscation}%\footnotemark[2]
 
-\author{A. N. Other\footnotemark[2], A. N. Other\footnotemark[2]\corrauth, ..., A. N. Other\footnotemark[3]}
+%\author[label1,label2]{Author One\corref{cor1}\fnref{label3}}
+\author[label1]{Author One}
+\address[label1]{School of Information Science and Technology, Northwest University, Xi'an, 710127, P.R. China.}
+\address[label2]{School of Computing and Communications, Lancaster University, UK}%\fnref{label4}}
 
-\address{\footnotemark[2]School of Information Science and Technology, Northwest University, Xi'an, 710127, P.R. China.\\
-\footnotemark[3]School of Computing and Communications, Lancaster University, UK}
+\cortext[cor1]{Corresponding author. Email address: zytang@nwu.edu.cn}
+%\fntext[label3]{I also want to inform about\ldots}
+%\fntext[label4]{Small city}
 
-\corraddr{Zhanyong Tang, School of Information Science and Technology, Northwest University, Xi'an, 710127, P.R. China.\\
-Email address: zytang@nwu.edu.cn}
+\ead{author.one@mail.com}
+%\ead[url]{author-one-homepage.com}
+
+\author[label1]{Author Two\corref{cor1}}
+%\address[label5]{Some University}
+\ead{author.two@mail.com}
+
+\author[label2]{Author Three}
+\ead{author.three@mail.com}
 
 \begin{abstract}
 Code virtualization built upon virtual machine (VM) technologies is emerging as a viable method for implementing code obfuscation to protect programs against unauthorized analysis. State-of-the-art VM-based protection approaches use a fixed scheduling structure where the program follows a single, static execution path for the same input. Such approaches, however, are vulnerable to certain scenarios where the attacker can reuse knowledge extracted from previously seen software to crack applications using similar protection schemes. This paper presents \DSVMP, a novel VM-based code obfuscation approach for software protection. \DSVMP brings together two techniques to provide stronger code protection than prior VM-based schemes. Firstly, it uses a dynamic instruction scheduler to randomly direct the program to execute different paths without violating the correctness across different runs. By randomly choosing the program execution paths, the application exposes diverse behavior, making it much more difficult for an attacker to reuse the knowledge collected from previous runs or similar applications to perform attacks. Secondly, it employs multiple VMs to further obfuscate the relationship between VM bytecode and their interpreters, making code analysis even harder. We have implemented \DSVMP in a prototype system and evaluated it using a set of widely used applications. Experimental results show that \DSVMP provides stronger protection with comparable runtime overhead and code size when compared to two commercial VM-based code obfuscation tools.
 \end{abstract}
 
-\keywords{Code virtualization; Code Obfuscation; Dynamic cumulative attack}
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+Code virtualization \sep Code Obfuscation \sep Dynamic cumulative attack
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+\end{keyword}
 
-\maketitle
+\end{frontmatter}
 
-%\footnotetext[2]{Please ensure that you use the most up to date class file, available from the SEC Home Page at\\
-%{\tiny\href{http://www3.interscience.wiley.com/journal/114299116/home}{\texttt{http://www3.interscience.wiley.com/journal/114299116/home}}}}
+%%
+%% Start line numbering here if you want
+%%
+% \linenumbers
 
-
+%% main text
 \section{Introduction}
 Unauthorized code analysis and modification based on reverse engineering is a major concern for software companies.
 Such attacks can lead to a number of undesired outcomes,
@@ -102,18 +180,17 @@ including cheating in games, unauthorized used of software, pirated pay-tv etc.
 Industry is looking for solutions for this issue to deter reverse engineering of software systems.
 By making sensitive code difficult to be traced or analyzed, code obfuscation is a potential solution for the problem.
 
-
 Code virtualization based on a virtual machine (VM) is emerging as a promising way for implementing code
 obfuscation~\cite{1Themida,2CV,3Vmprotect,5fang2011multi,6ming2011software,7wang2014tdvmp,8wang2013nislvmp}.
 The underlying principal of VM-based protection is to replace the program instructions with
 virtual bytecodes which attackers are unfamiliar with.
-These virtual bytecodes will then be translated into native machine code at runtime to execute on the underlying hardware platform.
+These virtual bytecodes will then be translated into native machine code at runtime
+to execute on the underlying hardware platform.
 Using a VM-based scheme, the execution path of the obfuscated code is controlled by a virtual instruction scheduler.
 A typical scheduler consists of two components: a \emph{dispatcher} that determines which bytecode is ready for execution,
 and a set of \emph{bytecode handlers} that translate bytecodes into native machine code.
 This process replaces the original program instructions with bespoke bytecodes,
 allowing developers to conceal the purpose or logic of sensitive code regions.
-
 
 Prior work on VM-based software protection primarily focuses on making
 a single set of bytecodes more complicate and uses one virtual instruction scheduler.
@@ -125,7 +202,6 @@ where an adversary can easily reuse knowledge obtained from other
 applications protected with the same scheme to preform reverse engineering.
 To protect software against cumulative attacks, it is important to have a certain degree of
 uncertainty and diversity during program execution~\cite{4collberg}.
-
 
 This paper presents \DSVMP (\emph{dynamic scheduling for VM-based code protection}),
 a novel VM-based code protection scheme to address cumulative attacks.
@@ -162,7 +238,7 @@ the software behavior or reuse knowledge extracted from other software products
 
 The whole is greater than the sum of the parts. These techniques, putting together,
 enable \DSVMP to provide stronger code protection than any of the VM-based techniques seen so far.
-We have evaluated \DSVMP on four widely used applications:  \texttt{md5}, \texttt{aescrypt}, \texttt{bcrypt} and \texttt{gzip}. Experimental results show that \DSVMP provides stronger protection with comparable runtime overhead and code size
+We have evaluated \DSVMP on four widely used applications:  ``\texttt{md5}", ``\texttt{aescrypt}", ``\texttt{bcrypt}" and ``\texttt{gzip}". Experimental results show that \DSVMP provides stronger protection with comparable runtime overhead and code size
 when compared to two commercial VM-based code obfuscation tools: Code Virtualizer~\cite{2CV} and VMProtect~\cite{3Vmprotect}.
 
 
@@ -184,11 +260,9 @@ Evaluation results are presented in Sections~\ref{sec:s-eva} and~\ref{sec:p-eva}
 in Section~\ref{sec:work}. Finally, Section~\ref{sec:con} presents our work conclusions.
 
 
-\section{Background\label{sec:bak}}
+\section{Background}\label{sec:bak}
 
 \paragraph*{VM-based code obfuscation}
-%It starts from extracting the critical code from the target program and disassembled into native instructions, and then converts it to the virtual instruction that we designed in advance. Subsequently, virtual instructions are encoded into bytecode program. Finally, the bytecode program and other VM components are assembled into the target program through binary rewriting.
-
 VM protection system extracts the critical code from the target program and disassembled
 into native instructions, then transforms native instructions to virtual instructions.
 The following, virtual instructions are encoded into bytecode program that can only be interpreted by
@@ -215,7 +289,7 @@ Such protection will become invalid once the adversary figures out how bytecodes
 
 \begin{figure}[t]%
     \centering
-    \includegraphics[width=1\columnwidth]{figure/figone.pdf}
+    \includegraphics[width=0.7\columnwidth]{figure/figone.pdf}
     \caption{Diversity affects effectiveness of the attack. In this example, a dark small square represents reusable attacking knowledge. Diverse program execution increases the difficulty of attacks.}\label{fig:Fig.1}
     %\vspace{-5mm}
 \end{figure}
@@ -227,16 +301,14 @@ other applications (that are protected using the same VM scheme) to perform atta
 This is referred as \emph{cumulative attacks} in this paper.
 In the first scenario, the software always follows the same execution path
 across multiple runs, and a few runs will allow an attacker to
-obtain sufficient knowledge about the program behavior. In the second
-scenario, the program execution path changes across different runs. As such,
-it will take longer and many more runs to gather enough information to
-perform the attack. As can be seen from this simple illustration, diversity keys to
-protect against dynamic cumulative attacks. This work aims to achieve this purpose.
+obtain sufficient knowledge about the program behavior.
+In the second scenario, the program execution path changes across different runs.
+As such, it will take longer and many more runs to gather enough information to perform the attack.
+As can be seen from this simple illustration, diversity keys to protect against dynamic cumulative attacks.
+This work aims to achieve this purpose.
 
 
-
-
-\section{The Attack Model\label{sec:attack}}
+\section{The Attack Model}\label{sec:attack}
 The classical approach to reverse engineer a VM-protected program typically
 follows three steps~\cite{10falliere2009inside,17rolles2009unpacking}. %described as follows:
 
@@ -269,10 +341,8 @@ to completely reverse the internal implementation of the target program.
 Our goal is to increase the difficulties in terms of time and efforts for an adversary to
 reverse the target program implementation using VM-based code obfuscation.
 
-%to reuse knowledge obtained from previous runs of the same program or other programs protected under the same VM scheme.
 
-
-\section{Code protection scheme of \DSVMP\label{sec:overview}}
+\section{Code protection scheme of \DSVMP}\label{sec:overview}
 To address the problem of cumulative attacks, we want to introduce a certain
 degree of diversity and uncertainty into program execution. This is achieved
 through using a diversified scheduling structure (Section~\ref {sec:dvs}) and
@@ -284,7 +354,7 @@ Code protection of \DSVMP follows several steps described as follows:
 \begin{figure}[!t]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=1.0\columnwidth]{figure/figtwo.pdf}
+  \includegraphics[width=0.7\columnwidth]{figure/figtwo.pdf}
   \caption{Offline code protection process. \DSVMP takes in a program binary. For each protected code region, it translates native instructions into bytecodes. Next, it generates multiple bytecode handlers that are semantically equivalent but implemented in different ways. It then generates the corresponding driver-data and multiple VMs. Finally, the generated VMs and associated components will be inserted into the program binary and fills the original code region with junk instructions.}\label{fig:Fig.2}
   %\vspace{-5mm}
 \end{figure}
@@ -306,12 +376,12 @@ Finally, a new section will be inserted into the program binary, which contains 
 
 This is an overview of our approach. We describe the implementation of \DSVMP in more details in the following sections.
 
-\section{\DSVMP Scheduling Structure \label{sec:dvs}}
+\section{\DSVMP Scheduling Structure}\label{sec:dvs}
 
 The \DSVMP VM scheduler uses multiple dispatchers to determine which bytecode instruction should be interpreted at given time.
 A unique design of \DSVMP is that the dispatcher used to schedule bytecode handlers will be dynamically changed at execution time. To further increase the diversity of program behaviour, \DSVMP also uses multiple bytecode instruction sets and bytecode handlers.
 
-\subsection{Multiple bytecode handlers \label{sec:mb}}
+\subsection{Multiple bytecode handlers}\label{sec:mb}
 
 \begin{figure}[t!]
 \scriptsize
@@ -357,17 +427,16 @@ At line 9 , the ``\texttt{lods}" (a load operand in the x86 assembly) instructio
 to calculate the address of an alternative bytecode handler and jump to execute it.
 By contrast, the instruction at line 13 will return to a dispatcher randomly.
 
-
 \begin{figure}[!t]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=1.0\columnwidth]{figure/figdh.pdf}
+  \includegraphics[width=0.65\columnwidth]{figure/figdh.pdf}
   %\vspace{-1mm}
   \caption{Using multiple dispatchers and insert a control unit to handlers increases the diversity of program executions. In this example, the type of handlers and the order of them are called are different across execution runs. }\label{fig:Fig.3}
   %\vspace{-3mm}
 \end{figure}
 
-\subsection{Special bytecodes program and multiple dispatchers \label{sec:mbd}}
+\subsection{Special bytecodes program and multiple dispatchers}\label{sec:mbd}
 The bytecode program determines the execution order of handlers. Compared to a single bytecode program,
 multiple bytecode programs provide stronger protection because the execution path of handlers will be more dynamic.
 Hence, \DSVMP uses multiple bytecode programs.
@@ -383,7 +452,6 @@ offset value between two adjacent handlers (for example, handler21 and handler43
 Recall that a control unit is inserted to the end of each handler. Before exiting the handler,
 if the control unit chooses to execute the next handler, it will fetch the corresponding offset value from \emph{DriverData2}.
 
-
 \DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
 Finally, scheduling structure of the \DSVMP with a single VM as an example, considering Figure~\ref{fig:Fig.3} that
 shows two possible program execution using three dispatchers and control unit in a single VM. As can be seen
@@ -392,9 +460,7 @@ and the type of handlers to be invoked and he order they are called are differen
 Therefore, knowledge about the program control flow extracted from the first run does not apply to the second one.
 
 
-
-
-\section{Multiple VMs \label{sec:mvm}}
+\section{Multiple VMs}\label{sec:mvm}
 In contrast to classical VM-based obfuscation approaches that uses a single VM (SVM), \DSVMP uses multiple VMs.
 Multiple VMs offer different sets handlers and bytecode instruction sets. Under such settings,
 bytecode instructions can be scheduled from different VMs and a virtual instruction can be interpreted by more than one handler.
@@ -404,7 +470,7 @@ Together with the above multiple scheduling approach, multiple VMs can further i
 \begin{figure}[!t]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=0.9\columnwidth]{figure/figmvm.pdf}\\
+  \includegraphics[width=0.6\columnwidth]{figure/figmvm.pdf}\\
   \caption{The structure of multiple VMs. Each VM has one set of unique handlers and two sets of bytecode instructions, \emph{DriverDataSetN1} and \emph{DriverDataSetN2}.}\label{fig:Fig.4}
   %\vspace{-2mm}
 \end{figure}
@@ -478,24 +544,10 @@ So our \DSVMP can exploit the dynamic scheduling for VM-based protection at runt
 Such run time diversity can effectively increase the difficulty of the reverse analysis and resist the cumulative attacks.
 
 
-
-\section{Example\label{sec:case}}
+\section{Example}\label{sec:case}
 We use the x86 code snippet shown in Figure~\ref{fig:examplecode} as an example to illustrate how \DSVMP operates.
-\texttt{STARTSDK} and \texttt{ENDSDK} are used to mark the begin and end of the code region respectively,
-and 00401036 and 00401038 are the address the two assembly instructions.
-
-
-\subsection{Process of protection}
-Firstly, \DSVMP extracts the critical code from the target program that disassembled into native instruction, here will automatically insert two additional instructions (``\texttt{push 0x40103b}" and ``\texttt{ret}") after two key
-instructions in order to jump back to execute the native code
-after the protected code region, as showed in figure~\ref{fig:examplecode}.
-It then converts the native instructions to virtual instructions according to a translation convention.
-The resulted virtual instructions is given in Table~\ref{tab:Tab.1}.
-\DSVMP's bytecode instructions are based on a stack machine model.
-Here the \texttt{load} instruction is used to push operands into the stack,
-and the \texttt{store} instruction is used to pop results out from the stack
-and store the result to the virtual context (VMContext).
-
+``\texttt{STARTSDK}" and ``\texttt{ENDSDK}" are used to mark the begin and end of the code region respectively,
+and ``00401036" and ``00401038" are the address the two assembly instructions.
 
 \begin{figure}[t!]
 \scriptsize
@@ -511,17 +563,28 @@ ENDSDK
 \label{fig:examplecode}
 \end{figure}
 
+\subsection{Process of protection}
+Firstly, \DSVMP extracts the critical code from the target program that disassembled into native instruction, here will automatically insert two additional instructions (``\texttt{push 0x40103b}" and ``\texttt{ret}") after two key
+instructions in order to jump back to execute the native code
+after the protected code region, as showed in figure~\ref{fig:examplecode}.
+It then converts the native instructions to virtual instructions according to a translation convention.
+The resulted virtual instructions is given in Table~\ref{tab:Tab.1}.
+\DSVMP's bytecode instructions are based on a stack machine model.
+Here the \texttt{load} instruction is used to push operands into the stack,
+and the \texttt{store} instruction is used to pop results out from the stack
+and store the result to the virtual context (VMContext).
+
 \begin{table}[!h]
 \scriptsize
 \begin{center}
 \caption{Generated virtual instructions for the example shown in Figure~\ref{fig:examplecode}\label{tab:Tab.1}}
-{\tabcolsep6pt\begin{tabular}{@{}clll@{}}
+{\tabcolsep6pt\begin{tabular}{@{}cllll@{}}
   \hline
-    & \textbf{Instr.1} & \textbf{Instr.2} & \textbf{Instr.3 \& Instr.4}\\
+    & \textbf{Instr.1} & \textbf{Instr.2} & \textbf{Instr.3} & \textbf{Instr.4} \\
   \hline
-  \textbf{ NI} & \texttt{mov eax, ebx} & \texttt{sub eax, 0x03} & \tabincell{l}{\texttt{push 0x40103b}\\\texttt{ret}}\\
+  \textbf{ NI} & \texttt{mov eax, ebx} & \texttt{sub eax, 0x03} & \texttt{push 0x40103b} & \texttt{ret} \\
   \hline
-  \textbf{ VI} & \tabincell{l}{\texttt{move 0x08}\\\texttt{load}\\\texttt{move 0x04}\\\texttt{store}} & \tabincell{l}{\texttt{move 0x04}\\ \texttt{load}\\ \texttt{load 0x03}\\ \texttt{sub}\\ \texttt{store}\\ \texttt{move 0x04}\\ \texttt{store}} & \tabincell{l}{\texttt{load 0x40103b}\\\texttt{ret}} \\
+  \textbf{ VI} & \tabincell{l}{\texttt{move 0x08}\\\texttt{load}\\\texttt{move 0x04}\\\texttt{store}} & \tabincell{l}{\texttt{move 0x04}\\ \texttt{load}\\ \texttt{load 0x03}\\ \texttt{sub}\\ \texttt{store}\\ \texttt{move 0x04}\\ \texttt{store}} & \texttt{load 0x40103b} & \texttt{ret} \\
   \hline
 \end{tabular}}{}
 \end{center}
@@ -530,36 +593,19 @@ Notes: In the table, ``NI" indicates the native x86 instructions, and ``VI" dona
 Here, our system inserts ``Instr.3" and ``Instr.4" in order to jump back to execute the native code after returning from the protected code region.
 \end{table}
 
-
-%In this example, we use two VMs: \texttt{VM1} and \texttt{VM2}.
 After translating the native code to virtual instructions, we use the deformation engine to transform the initial bytecode handlers set. For this example, our system with 2 VMs configurations, so we generate two sets of bytecode handlers which are semantically equivalent but are implemented in different ways.
 Then we randomly shuffle the serial numbers of these handlers, resulting in two new sets of handlers: \texttt{HAS1} and \texttt{HAS2}.  Each set of bytecode handlers is associated with two bytecode instruction sets: \emph{DriverDataSet11} and \emph{DriverDataSet12} for \texttt{HSA1} and \emph{DriverDataSet21} and \emph{DriverDataSet22} for \texttt{HSA2}. The resulted program is illustrated in Figure~\ref{fig:Fig.5}. We store the virtual instructions in the bytecode format,
 and will fill the critical code segment to be protected with junk instructions.
-
-
-%We also encrypt the resulted bytecode instructions using different keys for different handler sets. For example, \emph{DriverDataSet11} and \emph{DriverDataSet12} will be encrypted using one key, and \emph{DriverDataSet21} and \emph{DriverDataSet22} will be encrypted using another key. Our system will fill the critical code segment to be protected with junk instructions.
-%and will also insert a ``\texttt{push 0x40103b}'' and ``\texttt{jmp VMInit}" instruction group at the beginning of critical code segment. ``\texttt{jmp VMInit}" instruction redirect the entry point of a protected code region to the VM section,and the ``\texttt{push 0x40103b}'' instruction save the address of the native code which followed by the critical code, in order to jump back to execute the rest of native code when exiting the VM.
 
 Finally, \DSVMP create a new code section attached to the end of the target program.
 The new code section contains the implementation of the handlers, different sets of bytecode instructions,
 dispatchers and other VM components such \texttt{VMContext} and routines such as
 \texttt{VMInit} (used to initialize the VM) and \texttt{VMExit} (use for cleanup before exiting the VM).
 
-\begin{figure}[!t]
-  \centering
-  % Requires \usepackage{graphicx}
-  \includegraphics[width=1.0\columnwidth]{figure/figex.pdf}\\
-  \caption{The execution process of the protected program. Here each VM has two sets of bytecode instructions and one set of handlers.}\label{fig:Fig.5}
-  %\vspace{-5mm}
-\end{figure}
-
-
-
 
 
 \subsection{Runtime execution}
 Runtime execution of the protected code region is illustrated in Figure \ref{fig:Fig.5}, which follows a number of steps:
-
 \begin{itemize}
 \item \textbf{Step1:} The entry of the protected code segment contains an ``\texttt{jmp VMInit}" instruction. This transfers the control to the VM initialization routine, \texttt{VMInit}, which saves the native host context and initializes the virtual context.
 \item \textbf{Step2:} Next, a dispatcher starts working. It randomly selects a VM, we assume that \texttt{VM2} is chosen at beginning, and then it fetches a bytecode from the \emph{DriverDataSet21}. After decoding, the dispatcher gets a bytecode ``\texttt{6a}". It then jumps to execute ``\texttt{0x6aHandler}", and the next bytecode ``\texttt{07}" is its operand.
@@ -567,32 +613,19 @@ Runtime execution of the protected code region is illustrated in Figure \ref{fig
 \item \textbf{Step4:} Assume that the control unit decides to direct execute the next handler, ``\texttt{0x85Handler}". It will then fetch a bytecode from \emph{DriverDataSet22}, decoding it and getting the offset address of ``\texttt{0x85Handler}" . Using the offset, the control unit will jump to execute ``\texttt{0x85Handler}". After executing the handler, the program execution moves to Step 3.
 \item \textbf{Step5:} If the control unit chooses to return the controller to a dispatcher, it will randomly select a dispatcher to continue the execution. Then, the program moves to Step 6.
 \item \textbf{Step6:} The selected dispatcher randomly selects one VM to use. The dispatcher fetches a bytecode from this VM, decoding the bytecode to get the handler serial number.
-    %The handler serial number tells which handler to use to translate the bytecode to native machine code.
     It then jumps to execute the handler. After executing the handler, the program execution moves to Step 3.
 \item \textbf{Step7:} Step 3 and Step 4 are iterated until all the bytecodes get executed. The finally step is to invoke the \texttt{VMExit} to restore the native context and to continue executing the rest of target program.
 \end{itemize}
 
-\begin{table*}[!t]
-\scriptsize
-\begin{center}
-\caption{The relevant information about the program\label{tab:Tab.2}}
-{\tabcolsep12pt\begin{tabular}{@{}clccccc@{}}\hline
-  \multicolumn{2}{c}{\textbf{Basic info of program}} & \multicolumn{5}{c}{\textbf{Info of protected-software}} \\
+\begin{figure}[!t]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=0.7\columnwidth]{figure/figex.pdf}\\
+  \caption{The execution process of the protected program. Here each VM has two sets of bytecode instructions and one set of handlers.}\label{fig:Fig.5}
+  %\vspace{-5mm}
+\end{figure}
 
-  \textbf{program} & \textbf{key code segment} & \textbf{program} & \textbf{Node Num} & \textbf{Branch Num} &
-  $\sum\limits_{i = 0}^{i < n}{DR(i)}$ & $\sum\limits_{i = 0}^{i < n}{DF(i)}$\\
-  \hline
-  A & \tabincell{l}{\texttt{mov eax,ebx}\\ \texttt{sub eax,03}} & A' & 23 & 5 & 46 & 18\\
-
-  B & \tabincell{l}{\texttt{pop eax}\\ \texttt{add eax,ebx}} & B' & 48 & 9 & 96 & 36\\
-  \hline
-\end{tabular}}{
-\scriptsize\\Notes: In the table, the number of \texttt{n} which in $\sum\limits_{i = 0}^{i < n}{DR(i)}$
-and $\sum\limits_{i = 0}^{i < n}{DF(i)}$ are equal to the \texttt{NodeNum}.}
-\end{center}
-\end{table*}
-
-\section{Security Strength Analysis\label{sec:s-eva}}
+\section{Security Strength Analysis}\label{sec:s-eva}
 This section analyzes the security strength provided by \DSVMP. We first analyze the number of possible execution paths. Then we discuss the diversity of code structures.
 
 
@@ -642,38 +675,48 @@ We use a number of metrics to describe program code structures. These metrics ar
 \end{itemize}
 
 
+\begin{table*}[!h]
+\scriptsize
+\begin{center}
+\caption{The relevant information about the program\label{tab:Tab.2}}
+{\tabcolsep8pt\begin{tabular}{@{}clccccc@{}}\hline
+  \multicolumn{2}{c}{\textbf{Basic info of program}} & \multicolumn{5}{c}{\textbf{Info of protected-software}} \\
 
+  \textbf{program} & \textbf{key code segment} & \textbf{program} & \textbf{Node Num} & \textbf{Branch Num} &
+  $\sum\limits_{i = 0}^{i < n}{DR(i)}$ & $\sum\limits_{i = 0}^{i < n}{DF(i)}$\\
+  \hline
+  A & \tabincell{l}{\texttt{mov eax,ebx}\\ \texttt{sub eax,03}} & A' & 23 & 5 & 46 & 18\\
 
+  B & \tabincell{l}{\texttt{pop eax}\\ \texttt{add eax,ebx}} & B' & 48 & 9 & 96 & 36\\
+  \hline
+\end{tabular}}{
+\scriptsize\\Notes: In the table, the number of \texttt{n} which in $\sum\limits_{i = 0}^{i < n}{DR(i)}$
+and $\sum\limits_{i = 0}^{i < n}{DF(i)}$ are equal to the \texttt{NodeNum}.}
+\end{center}
+\end{table*}
 
 Table~\ref{tab:Tab.2} gives two examples of code regions to be protected. These are two simple code snippets and without code obfuscation, these two examples have very similar structures because all of then with just one basic block and no branches. Transforming the code regions using \DSVMP, we obtain different metric values for both code regions,
 which indicate the transformed code segments have distinct structures.
 We use the following formula to quantify the code structure information, X after code obfuscation.
 \[\begin{array}{l}
- SInfo{r_{X}} = NodeNu{m_{X}} + BranchNu{m_{X}} \\
-                                                 + \sum\limits_{i = 0}^{i < n} {(DR(i) + DF(i))}
+ SInfo{r_{X}} = NodeNu{m_{X}} + BranchNu{m_{X}} + \sum\limits_{i = 0}^{i < n} {(DR(i) + DF(i))}
  \end{array}\]
 
 Applying this formula for the transformed code segments, A' and  B', listed in Table~\ref{tab:Tab.2},  we get :
 \[\begin{array}{l}
- SInfo{r_{A'}} = NodeNu{m_{A'}} + BranchNu{m_{A'}} \\
-                                                 + \sum\limits_{i = 0}^{i < n} {(DR(i) + DF(i))} \\
-                                       = 23 + 5 + (46 + 18)\\
-                                       %(DR(0) + DR(1) + ... + DR(22) \\
-                                                 %+ DF(0) + DF(1) + ... + DF(22)) \\
-                                       = 92 %\\
-\end{array}\]
-\[\begin{array}{l}
- SInfo{r_{B'}} = NodeNu{m_{B'}} + BranchNu{m_{B'}} \\
-                                                 + \sum\limits_{i = 0}^{i < m} {(DR(i) + DF(i))}  \\
+ SInfo{r_{A'}} = NodeNu{m_{A'}} + BranchNu{m_{A'}} + \sum\limits_{i = 0}^{i < n} {(DR(i) + DF(i))} \\
+                                        = 23 + 5 + (46 + 18)\\
+                                        = 92 \\
+ SInfo{r_{B'}} = NodeNu{m_{B'}} + BranchNu{m_{B'}} + \sum\limits_{i = 0}^{i < m} {(DR(i) + DF(i))}  \\
                                         = 48 + 9 + (96 + 36)\\
-                                        %(DR(0) + DR(1) + ... + DR(47) \\
-                                                %+ DF(0) + DF(1) + ... + DF(47)) \\
                                         =  189
 \end{array}\]
 
-where $n=NodeNu{m_{A'}}$ and $m=NodeNu{m_{B'}}$. From $SInfo{r_{A'}}$ and $SInfo{r_{B'}}$,
+where $n=NodeNu{m_{A'}}$ and $m=NodeNu{m_{B'}}$.
+From $SInfo{r_{A'}}$ and $SInfo{r_{B'}}$,
 we can calculate the similarity $SDiff$, for two code structure, A' and B' as:
-\[SDiff = \frac{{|SInfo{r_{A'}} - SInfo{r_{B'}}|}}{{SInfo{r_{A'}} + SInfo{r_{B'}}}}\;{\kern 1pt}  = \frac{{97}}{{281}} = 34.5\% \]
+\begin{align*}
+SDiff = \frac{{|SInfo{r_{A'}} - SInfo{r_{B'}}|}}{{SInfo{r_{A'}} + SInfo{r_{B'}}}}\;{\kern 1pt}  = \frac{{97}}{{281}} = 34.5\% \end{align*}
 
 Thus it can be seen the code structure similarity between two A' and B' is  34.5\%.
 This example shows that \DSVMP can significantly increase the dissimilarity of code structures even for simple code segments.
@@ -681,23 +724,16 @@ We also observe that the similarity between transformed code regions drops signi
 as the complexity of original code segments increases.
 
 
-\subsection{Attack experiment}
-In this experiments, we used three VMs and five dispatchers for \DSVMP. We used IDA~\cite{14Idapro} to debug the program to obtain the control flow graph of the protected code region, and used it to locate some of key nodes such as dispatcher.
-However, for some basic blocks that end with an indirect jump instruction, IDA can not get the target address automatically. This means that the control flow graph of the program is incomplete, and we maybe lack of some key connections between basic blocks. In addition, previous attacking experience will be useless because one will have process the program binary from scratch during each program run.
-We have to spend a lot of time to collect dynamic instructions, and as far as possible to manually connect the control flow graph in a single run.
-%The key observation here is that the control flow graph of the program every time when we process the program binary.
-%As a result, previous attacking experience will be useless because one will have process the program binary from scratch during each program run
-%\FIXME{By analyzing the control flow graph to find the key nodes dispatcher, and then through the following dynamic debugging to collect the bytecodes. In order to describe the attack experiment process.}
+\section{Performance Evaluation}\label{sec:p-eva}
+In this section, we evaluated \DSVMP using four widely use application
+and compared it against two commercial VM-based protection systems,
+then present the evaluation results of \DSVMP based on the experimental data in detail.
 
-Then we used OllyDbg~\cite{15Ollydbg} to perform the dynamic debugging, and locate the dispatcher. It uses the x86 register \texttt{ESI} as the program counter for bytecode instruction. Further, we uses \texttt{ESI} to track the movement of tainted data and find that the bytecodes will be decrypted and stored in register \texttt{EAX}. This value is the serial number of handler which should be executed. We can use these values to analyze the execution order of handlers, so repeat the above operation and collect all those values that scheduled by each dispatcher. All these data, however, still cannot restore the execution logic of handlers, because these bytecodes from multiple VMs, the same data may represent different meanings. In addition, the handlers that we collected by dispatcher are not all of them, because in \DSVMP some handlers probably scheduled by other handlers (see Section~\ref{sec:dvs}). What counts is \DSVMP has the different bytecode handler scheduling for different runs, which makes the dynamic debugging more difficult.
-
-
-
-\begin{table*}[!t]
+\begin{table*}[!h]
 \scriptsize
 \begin{center}
 \caption{Information of the bechmarks\label{tab:Tab.3}}
-{\tabcolsep12pt\begin{tabular}{@{}rlrrlrrl@{}}\hline
+{\tabcolsep8pt\begin{tabular}{@{}rlrclrrl@{}}\hline
    & \textbf{program} & \textbf{Size(KB)} & \textbf{Instr. Total} & \textbf{Function to protect} & \textbf{Instr. Protect} & \textbf{Instr. Executed} & \\
   \hline
    & md5 & 11 & 1357 & \texttt{Transform()} & 563 & 229141 & \\
@@ -707,20 +743,12 @@ Then we used OllyDbg~\cite{15Ollydbg} to perform the dynamic debugging, and loca
   \hline
 \end{tabular}}{}
 \end{center}
-Notes: The 3rd column shown the total number of target program instructions.
-The 4rd column of the table gives the function to be projected and the 5th column shows the number of instructions of the function. The number of instructions got executed with the critical functions while processing the test file, and shown in the last column of the table.
+Notes: The 3rd column shown the total number of target program instructions. The 4rd column of the table gives the function to be projected and the 5th column shows the number of instructions of the function. The number of instructions got executed with the critical functions while processing the test file, and shown in the last column of the table.
 \end{table*}
-
-
-\section{Performance Evaluation\label{sec:p-eva}}
-In this section, we evaluated \DSVMP using four widely use application
-and compared it against two commercial VM-based protection systems,
-then present the evaluation results of \DSVMP based on the experimental data in detail.
-
 
 \subsection{Evaluation Platform and Benchmarks}
 We evaluated \DSVMP on a PC with an 3.0 GHz Intel Core$^{TM}$ 3 Duo processor and 4GB of RAM.
-The PC runs the Windows 7 operating system. We evaluated our approach using four widely use applications: \texttt{md5}~\cite{19md5}, \texttt{aescrypt}~\cite{20Aescrypt}, \texttt{bcrypt}~\cite{21bcrypt} and \texttt{gzip}~\cite{22gzip}.
+The PC runs the Windows 7 operating system. We evaluated our approach using four widely use applications: ``\texttt{md5}"~\cite{19md5}, ``\texttt{aescrypt}"~\cite{20Aescrypt}, ``\texttt{bcrypt}"~\cite{21bcrypt} and ``\texttt{gzip}"~\cite{22gzip}.
 We used these applications to process a test text file. The size of the file is 26 KB.
 Table~\ref{tab:Tab.3} gives some information of the protected code regions for each benchmark.
 The total number of target program instructions are shown in the 3rd column of the table.
@@ -730,10 +758,25 @@ Finally, we use the Intel Pin tools~\cite{pin} to calculate the number of instru
 while processing the test file, and shown in the last column of the table.
 
 
-
 \subsection{Code Size and Runtime Overhead}
 \paragraph*{Code size} For each target benchmark, we applied \DSVMP to the target function and repeated the process for 8 times.
 For each protection run, we used a different number of VM configuration.
+
+\begin{figure}[t]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/codesize.pdf}
+\caption{The impact of code sizes for \DSVMP configurations with a different number of VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.size}
+\end{minipage}
+\hspace{0.005\textwidth}
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/runtime.pdf}
+\caption{The average runtime of target benchmark when protected with different VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.time}
+\end{minipage}
+\end{figure}
+
 
 Figure~\ref{fig:Fig.size} shows how the \DSVMP multi-VM scheme affects the code size,
 and the number ``0" represents the original target program.
@@ -743,22 +786,11 @@ Obviously, the increase in code size is regular, because the block of PE executa
 are usually follow a certain alignment value (such as, 4096 or 512)~\cite{pe}.
 
 Moreover, we can find that there is a strong correlation between the code size of and the number of protected instructions.
-This explains why \texttt{aescrypt} has the fastest increase of code size as it has
+This explains why ``\texttt{aescrypt}" has the fastest increase of code size as it has
 the largest number of protected instructions (see Table~\ref{tab:Tab.3}).
-For the same reason, the code size of \texttt{bcrypt} grows slower than other programs,
+For the same reason, the code size of ``\texttt{bcrypt}" grows slower than other programs,
 as this benchmark has the least number of protected instructions.
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=.45\textwidth]{figure/codesize.pdf}
-\caption{The impact of code sizes for \DSVMP configurations with a different number of VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.size}
-\end{figure}
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=.45\textwidth]{figure/runtime.pdf}
-\caption{The average runtime of target benchmark when protected with different VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.time}
-\end{figure}
 
 \paragraph*{Runtime overhead} To evaluate the runtime overhead of \DSVMP, we used benchmark to process the test file.
 For each protected benchmark we repeated the process for 10 times and report the average runtime per benchmark.
@@ -766,106 +798,139 @@ For each protected benchmark we repeated the process for 10 times and report the
 The results are depicted in Figure~\ref{fig:Fig.time},
 which shows that the majority of average runtime will tend to a stable range with the increase of the number of VMs.
 This phenomenon is inevitable, the increase in the number of VMs leads to a
-greater likelihood and diversity of handler's choices, when interpret the virtual instructions.
+greater likelihood and diversity of handler's choice, when interpret the virtual instructions.
 It does not add a lot of extra operations to the core function implementation.
 The main reason for the impact of runtime overhead is the switching of multiple VMs
 and the execution difference of obfuscated handler.
 As the number of VMs increases, the frequency of VM switching tends to stabilize,
-so the impact of different VM on the time is difference but tends to a stable range.
+so the impact of different VM on the time is different but tends to a stable range.
 
 Besides, we found that the greater the execution number of the protected instruction at runtime
 will have a greater impact on runtime overhead.
-This is why \texttt{bcrypt} has a much higher runtime overhead than other benchmarks.
-
-We also found an interesting phenomenon from figure~\ref{fig:Fig.time}, when the VM is configured to a specific value (2,4 and 8),
-its running time is always less than the rest of the VM configuration.
-After experimental analysis, we think that this special case is caused by the optimization of the ``\texttt{div}" instruction~\footnote{When the divisor is 2 or a power of 2, the compiler will use the shift operation instead of the division.}.
-In our system, both the structure control unit and multi-VM switcher use the ``\texttt{div}" instruction to get random results,
-and they are used frequently at runtime.
-So the runtime overhead for these VMs (configured to 2, 4, and 8) will be relatively smaller than for other protection strategies.
+This is why ``\texttt{bcrypt}" has a much higher runtime overhead than other benchmarks.
 
 There is also a special phenomenon that compared to other protection strategies,
 2-VM increase in running time overhead is not obvious.
-This is due to the fact that the random policy we are using does not frequently switch VM in a 2-VM configuration,
-and we have done the relevant test experiments, see Section~\ref{sec:s-d} and table~\ref{tab:Tab.4} for details.
+This is due to the fact that the random policy we are using does not frequently switch VM in a 2-VM configuration.
 Therefore, its impact on time overhead will not be obvious.
+We have done the relevant test experiments to validate it, see Section~\ref{sec:s-d} for details.
 
 
-
-
-\paragraph*{Discussion} We can draw from the above analysis results that
-the temporal and spatial overhead of the target program are mainly affected by the size and execution of protected instructions.
-Comprehensively assess the experimental results of several target benchmarks in table~\ref{tab:Tab.3}. For target program, the smaller the proportion of protected instructions, the smaller the spatial overhead of it.
-Runtime overhead also has the same phenomenon that the target program has the smaller temporal overhead,
-since the smaller execution number of the protected instructions at runtime.
-We have reason to believe, if we only focus on protecting a few critical code regions,
+\paragraph*{Discussion} 
+Comprehensively assess the experimental results of several target benchmarks in table~\ref{tab:Tab.3}. 
+We find the temporal and spatial overhead of the target program is mainly affected by 
+the size of the key code and the number of instructions at execution time.
+So we have reason to believe, if we only focus on protecting a few critical code regions,
 \DSVMP will not cause too much impact on the temporal and spatial overhead of the target program.
 
 
+\subsection{Structural diversity}\label{sec:s-d}
 
-\subsection{Structural diversity\label{sec:s-d}}
+\paragraph*{Multi-VM switching test}
+In order to verify the impact of multi-VM switching on program execution, we did a runtime tracking experiment.
+We only protected one instruction ``\texttt{mov eax, 1234567}" for ``\texttt{test.exe}"\footnote{A small test procedures, size of 3 KB, and its function is to pop up a confirmation box.}.
+So as to reduce the complexity of the protected program as much as possible to facilitate the tracking procedures.
+We use three kinds of strategy (2-VM, 3-VM and 4-VM) to protect the target program,
+and then track the program execution 5 times and collect the relevant information.
 
-\begin{table}[!t]
-\scriptsize
-\begin{center}
-\caption{Runtime testing of multiple VM switches\label{tab:Tab.4}}
-{\tabcolsep4pt\begin{tabular}{@{}llrrrrr@{}}\hline
-  \textbf{program} & \textbf{Information} & \textbf{Run 1} & \textbf{Run 2} & \textbf{Run 3} & \textbf{Run 4} & \textbf{Run 5}\\
-  \hline
-   & No Switch & 38 & 30 & 34 & 30 & 41 \\
-  Test-2VM & Switch & 31 & 39 & 35 & 39 & 28 \\
-   & Instr. Executed & 1640 & 1664 & 1652 & 1664 & 1631 \\
-  \hline
-   & No Switch & 16 & 24 & 18 & 13 & 20 \\
-  Test-3VM & Switch & 53 & 45 & 51 & 56 & 49 \\
-   & Instr. Executed & 1706 & 1682 & 1700 & 1715 & 1694 \\
-   \hline
-   & No Switch & 21 & 15 & 14 & 23 & 13 \\
-  Test-4VM & Switch & 48 & 54 & 55 & 46 & 56 \\
-   & Instr. Executed & 1691 & 1709 & 1712 & 1685 & 1715 \\
-  \hline
-\end{tabular}}{}
-\end{center}
-Notes: A total of 69 handler schedules. ``Switch" is the number of times the VM switch, and ``No Switch" is the opposite. ``Instr. Executed" refers to the number of instructions executed between the entry and exit VM section.
-\end{table}
 
-\begin{figure}[!t]
+\begin{figure}[t]
 \centering
-\includegraphics[width=.45\textwidth]{figure/testinstr.pdf}
-\caption{The number of instruction dynamic executions changes with different VM configurations, data from table \ref{tab:Tab.4}.} \label{fig:Fig.testinstr}
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/testinfor.pdf}
+\caption{The probability distribution of multiple VMs switching for multiple runs. ``Switch" is the number of times the VM switch, and ``No Switch" is the opposite.}\label{fig:Fig.testinfor}
+\end{minipage}
+\hspace{0.005\textwidth}
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/testinstr.pdf}
+\caption{The number of instruction dynamic executions changes with different VM configurations. Here it is mainly affected by the Multiple VM switch.} \label{fig:Fig.testinstr}
+\end{minipage}
 \end{figure}
 
-\paragraph*{Multi-VM switching test} In order to verify the impact of multi-VM switching on program execution, we did a runtime tracking experiment.
-We only protected one instruction ``\texttt{mov eax, 1234567}" for ``\texttt{test.exe}"\footnote{A small test procedures, size of 3 KB, and its function is to pop up a confirmation box.}.
-So as to reduce the complexity of the protected program as much as possible to facilitate the tracking procedures. 
-We use three kinds of strategy (2-VM, 3-VM and 4-VM) to protect the target program, 
-and then track the program execution 5 times and collect the relevant information, as shown in table~\ref{tab:Tab.4}. 
 
-A total of 69 times handler scheduling are required to implement the test key instruction functions. 
-We found that the frequency of VM switching is not high when the number of VMs is 2, 
-unlike the 3-VM and 4-VM of the switching frequency has exceeded 75\%. 
-So the impact of 2-VM on the number of instructions got executed is less than 3-VM and 4-VM, as the figure~\ref{fig:Fig.testinstr} shows.
-In particular, we removed handler obfuscation and used only one dispatcher in the protection process. 
-This can minimize the impact of irrelevant factors. 
-Therefore, only the multi-VM switcher can affect the ``Instr. Executed" in the table. 
-This can also explain why the 2-VM has a smaller effect on runtime overhead in figure~\ref{fig:Fig.time}.
+Figure~\ref{fig:Fig.testinfor} shows the VM switching frequency information of ``\texttt{test.exe}" at five actual execution. A total of 69 times handler scheduling are required to implement the test key instruction functions.
+We found that the frequency of VM switching is not high when the number of VMs is 2,
+unlike the 3-VM and 4-VM of the switching frequency has exceeded 75\%.
+In particular, we removed handler obfuscation and used only one dispatcher in the protection process.
+This can minimize the impact of irrelevant factors, and then only the multi-VM switcher can affect the number of instruction executed.
+Through the experiment we found that the impact of 2-VM on the number of instructions got executed is less than 3-VM and 4-VM,
+as the figure~\ref{fig:Fig.testinstr} shows.
+In general, the number of instruction execution can be reflected to some extent the size of the execution time.
+So this can also explain why the 2-VM has a smaller effect on runtime overhead in figure~\ref{fig:Fig.time}.
 
+\begin{figure}[t]
+\centering
+\subfigure[]{
+\includegraphics[width=0.485\textwidth]{figure/exec3vm.pdf}}
+\subfigure[]{
+\includegraphics[width=0.485\textwidth]{figure/exec4vm.pdf}}
+\caption{Dynamic VM switching during the protected program execution. The handler's scheduling order is plotted on the abscissa, starting at the origin and moving to the right. There are a total of 69 schedules. The value on the ordinate corresponds to VM's ID which is selected for each schedule. Lines of different colors show the true change of the VM in 5 executions. (a) is ``Test-3VM", and (b) is``Test-4VM". }\label{fig:Fig.exec3vm}
+\end{figure}
 
 \paragraph*{Perform path runtime diversity}
-\FIXME{Control flow graphs and execution path distributions.}
+In the course of the above experiment, we also collected the ID of the VM where the handler was executed each time. 
+Figure~\ref{fig:Fig.exec3vm} shows the switching of the VM for five runs. 
+The data in (a) and (b) are from the test program with 3-VM and 4-VM configurations, respectively. 
+
+As can be clearly seen in the figure, VMs are randomly selected for different runs, 
+and the path of execution 5 times is completely different. As alluded to earlier (section~\ref{sec:mvm}),
+the set of handlers in each VM is confused with different obfuscation methods and is combined in an out-of-order manner. 
+Therefore, the structure of the called Handler is different for the same phase of the different runs. 
+Take 4-VM configuration test program as an example, a total of 69 Handlerd scheduling, 
+regardless of the middle of the dispatcher changes in the process, 
+only the Handler scheduling execution there is $4^{69}$ different execution path. 
+This value is very large, and it will be great resistance to the adversary who use cumulative attacks.
+
+\paragraph*{Discussion}
+According to the experimental results, we can see, the execution path of a protected program is variable at runtime. 
+Combined with various handler sets, the target program protected by \DSVMP has temporal diversity~\cite{4collberg}. 
+Therefore, our approach can effectively resist the cumulative attacks.
+
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=0.8\textwidth]{figure/exec2vm.pdf}
+%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec2vm}
+%\end{figure}
+
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=.8\textwidth]{figure/exec3vm.pdf}
+%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec3vm}
+%\end{figure}
+
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=.8\textwidth]{figure/exec4vm.pdf}
+%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec4vm}
+%\end{figure}
 
 
 
 \subsection{Comparisons with state-of-the-arts}
 We also compared \DSVMP against two commercial VM protection systems,
 Code Virtualizer (CV)~\cite{2CV} and VMProtect (VMP)~\cite{3Vmprotect}, in terms of code sizes and runtime overhead.
-%We use the FISH32 (White) VM from the 24 customized VMs of CV to perform code protection because this VM has moderate runtime overhead.
 We adopt a custom protection scheme when using the CV to protect the target program,
 because such a CV has a moderate temporal and spatial overhead.
 In addition, we also adopt the VMP with two kinds of schemes to protect the target program,
 \emph{Maximum-protection} and \emph{Maximum-speed}.
-For \DSVMP, We used a configuration of 5 VMs, \DSVMP-5VM, in this experiment.
+For \DSVMP, We used a configuration of 5 VMs, \DSVMP-5VM, in this experiment. 
 
+\begin{figure}[t]
+\centering
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/comsize.pdf}
+\caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
+\end{minipage}
+\hspace{0.005\textwidth}
+\begin{minipage}[t]{0.49\linewidth}
+\centering
+\includegraphics[width=.9\textwidth]{figure/comtime.pdf}
+\caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
+\end{minipage}
+\end{figure}
 
 
 \paragraph*{Code size} Figure \ref{fig:Fig.com-size} shows the impact on code size of several VM-based protection systems.
@@ -873,19 +938,7 @@ From the figure we can see that the effects of \DSVMP and commercial VM-based pr
 Overall, the expansion of the code size is mainly affected by the size of the protected instructions,
 the more the target code brings more spatial overhead.
 Among them, the \texttt{aescrypt} has a greater code bloat after protected by VMProtect Maximum-protection,
-it may be caused by the complexity of the function \texttt{encrypt-stream()} and the Maximum-protection strategy.
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=.45\textwidth]{figure/comsize.pdf}
-\caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
-\end{figure}
-
-\begin{figure}[!t]
-\centering
-\includegraphics[width=.45\textwidth]{figure/comtime.pdf}
-\caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
-\end{figure}
+it may be caused by the complexity of the function \texttt{encrypt-stream()} and the Maximum-protection strategy. 
 
 
 \paragraph*{Runtime overhead} The average runtime overhead of the three schemes are depicted in figure \ref{fig:Fig.com-time},
@@ -897,8 +950,7 @@ which on average is higher than \DSVMP and VMProtect Maimum-speed.
 \paragraph*{Discussion} Through the above analysis and comparison, we argue that the temporal and spatial overhead of our \DSVMP are acceptable.
 
 
-
-\section{Related Work\label{sec:work}}
+\section{Related Work}\label{sec:work}
 Early work on the binary code protection relies on simple encryption and obfuscation methods,
 but they are vulnerable to the sophisticated, diversified attacks developed over the past years.
 Traditionally, techniques like junk instructions~\cite{23linn2003obfuscation}, packers~\cite{25Execryptor,26upx},
@@ -908,7 +960,6 @@ control flow and data flow obfuscation~\cite{13liem2008compiler,27ge2005control,
 all aim to obfuscate the semantic and logical information of the target program.
 In practice, these approaches are often used in combination to provide stronger protection.
 \DSVMP also leverages some of the code obfuscation techniques developed in the past for code protection.
-
 
 There is a growing interest in using code virtualization to protect software from malicious reverse engineering.
 Fang \emph{et al.}~\cite{5fang2011multi} proposed a protection scheme based on multi-stage code obfuscation.
@@ -924,6 +975,12 @@ Wang \emph{et al.}~\cite{7wang2014tdvmp} proposed a protection scheme to increas
 This is achieved by constructing several equivalent but different forms of sub program execution paths,
 from which a path will be randomly selected to execute at runtime.
 
+In recent years there are some deobfuscation methods have been proposed. 
+Coogan \emph{et al.}~\cite{coogan2011deobfuscation} puts forward a behavior based analysis method to analyze the important behavior of code, but it does not pay attention to how to restore the original code structure.
+Sharif \emph{et al.}~\cite{sharif2009automatic} used dynamic data-flow and taint analysis to identify data and extract the syntactic and semantic information about the bytecode instructions.
+Yadegari \emph{et al.}~\cite{Yadegari2015A}, by tracking the flow of inputs values, and then use semantics-preserving code transformations to simplify the logic of the instructions.
+These approach, however, can not restore the structure of the original code completely, and needed taint analysis to get the data flow.
+
 As a departure from prior work, \DSVMP presents a dynamic scheduling structure to improve security for software.
 \DSVMP has integrated several novel techniques to increase the diversity and uncertainly of program execution.
 These include using a control unit to diversify the execution path of bytecode handlers and using multiple VMs
@@ -932,7 +989,7 @@ Integrating these techniques allows \DSVMP to provide a more diverse program exe
 This richer set of diversity can better protect software against code reverse engineering~\cite{20larsen2014sok}.
 
 
-\section{Conclusions\label{sec:con}}
+\section{Conclusions}\label{sec:con}
 This paper has presented \DSVMP, a novel VM-based code protection scheme.
 \DSVMP uses a dynamic scheduling structure and multiple VMs to increase
 diversity of program execution. We have shown that code
@@ -946,7 +1003,8 @@ protection schemes. Our experimental results show that \DSVMP provide
 stronger protection with comparable overhead of runtime and code size.
 
 \section*{Acknowledgment}
-This work was partial supported by projects of the National Natural Science Foundation of China (No. 61373177, No. 61572402),
+This work was partial supported by projects of the National Natural Science Foundation of China 
+(No. 61373177, No. 61572402, No. 61672427),
 the Key Project of Chinese Ministry of Education (No. 211181),
 the International Cooperation Foundation of Shaanxi Province, China (No. 2013KW01-02, No. 2015KW-003, No. 2016KW-034),
 the China Postdoctoral Science Foundation (grant No. 2012M521797),
@@ -955,8 +1013,42 @@ the Research Project of NWU, China (No. 14NW28),
 and the UK Engineering and Physical Sciences Research Council under grants EP/M01567X/1 (SANDeRs), EP/M015793/1 (DIVIDEND).
 
 
-%\bibliographystyle{unsrt}
-\bibliographystyle{wileyj}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%\appendix
+
+%\section{Section in Appendix}
+%\label{appendix-sec1}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}         ==>>  [#]
+%%   \cite[chap. 2]{key} ==>> [#, chap. 2]
+%%
+
+%% References with bibTeX database:
+
+\bibliographystyle{elsarticle-num}
+% \bibliographystyle{elsarticle-harv}
+% \bibliographystyle{elsarticle-num-names}
+% \bibliographystyle{model1a-num-names}
+% \bibliographystyle{model1b-num-names}
+% \bibliographystyle{model1c-num-names}
+% \bibliographystyle{model1-num-names}
+% \bibliographystyle{model2-names}
+% \bibliographystyle{model3a-num-names}
+% \bibliographystyle{model3-num-names}
+% \bibliographystyle{model4-names}
+% \bibliographystyle{model5-names}
+% \bibliographystyle{model6-num-names}
+
 \bibliography{reference}
 
+
 \end{document}
+
+%%
+%% End of file `elsarticle-template-num.tex'.
