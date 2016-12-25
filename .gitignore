@@ -1,2 +1,5 @@
 *.spl
 DSVMP-C&S.pdf
+DSVMP-C&S.aux
+*.log
+*.synctex
