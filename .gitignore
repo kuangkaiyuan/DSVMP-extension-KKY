@@ -1,2 +1,12 @@
 *.spl
 DSVMP-C&S.pdf
+<<<<<<< HEAD
+DSVMP-C&S.aux
+*.log
+=======
+*.aux
+DSVMP-C&S.log
+*.out
+DSVMP-C&S.synctex
+>>>>>>> origin/master
+*.synctex
