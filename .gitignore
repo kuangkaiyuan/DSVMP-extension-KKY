@@ -10,3 +10,6 @@ DSVMP-C&S.log
 DSVMP-C&S.synctex
 >>>>>>> origin/master
 *.synctex
+*.bbl
+DSVMP-C&S.blg
+DSVMP-C&S.pdf
