@@ -1,32 +1,32 @@
 \section{The Attack Model}\label{sec:attack}
+\subsection{Attacking methods}
 The classical approach to reverse engineer a VM-protected program typically
-follows three steps~\cite{10falliere2009inside,17rolles2009unpacking}. %described as follows:
-
-The first step is to reverse engineer the essential components of a VM interpreter,
-and the purpose of this step is to get the location and interaction information of each
-component of the virtual interpreter. To do so, the attacker needs to locate
+follows three steps~\cite{10falliere2009inside,17rolles2009unpacking}, described as follows.
+The first step is to understand how each components of a VM interpreter works. 
+To do so, the attacker needs to locate
 these components and analyze how the dispatcher schedules bytecode instructions.
 The second step is to understand how each bytecode is mapped to machine code
 and work out the semantics of the bytecode instructions.
-The third step is to use knowledge obtained in the first two steps to recover the original
-logical implementation of the target program, then remove the redundant information
+The third step is to use knowledge obtained in the first two steps to recover the
+logical of the target program, through removing the redundant information
 and restoring a program that is similar to the original program.
 
 
-This type of reverse approach takes certain analysis time and requires attacker to
-have a certain understanding of the principle of code virtualization.
-However, a skilled attacker is able to use the method of cumulative attacks, then reuse knowledge
+To perform such an attack, a significant portion of the time will have to spend in analyzing the working 
+mechanism of the VM.
+The problem is that a skilled attacker could  reuse knowledge
 gathered from parts of the program to analyze other protected regions of
 the same program or other applications protected using the same VM scheme and bytecode instructions.
 
-In this work, we assume that the attacker has the necessary tools and skills to implement the above attacks.
-we assume the adversary holds an executable binary of the
-target software and can run the program in a malicious host
+\subsection{Threat model} 
+Our attack model assumes that the attacker has the necessary tools and skills to implement the above attacks.
+We assume the adversary holds an executable binary of the
+target software and can run the program in a control
 environment~\cite{11collberg2002watermarking}. We also assume the adversary
-has the tools and skills to access memory and registers, trace program
-instructions, and modify the program instructions and control flows using
-tools like ``IDA"~\cite{14Idapro}, ``Ollydbg"~\cite{15Ollydbg} and
+can access content stored in memory and registers , trace program
+instructions, and modify the program instructions and control flows.
+All these can be achieved using advance tools like ``IDA"~\cite{14Idapro}, ``Ollydbg"~\cite{15Ollydbg} and
 ``Sysinternals suite"~\cite{16Sysinternalssuite}. The aim of the adversary is
 to completely reverse the internal implementation of the target program.
 Our goal is to increase the difficulties in terms of time and efforts for an adversary to
-reverse the target program implementation using VM-based code obfuscation.
+reverse the target program implementation protected using VM-based code obfuscation. 
