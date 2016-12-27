@@ -241,7 +241,7 @@ By contrast, the instruction at line 13 will return to a dispatcher randomly.
   % Requires \usepackage{graphicx}
   \includegraphics[width=0.65\columnwidth]{figure/figdh.pdf}
   %\vspace{-1mm}
-  \caption{Using multiple dispatchers and insert a control unit to handlers increases the diversity of program executions. In this example, the type of handlers and the order of them are called are different across execution runs. }\label{fig:Fig.3}
+  \caption{Using multiple dispatchers and insert a control unit to handlers increases the diversity of program executions. In this example, the type of handlers and the order of them are called are different across execution runs. }\label{fig:Fig.dh}
   %\vspace{-3mm}
 \end{figure}
 
@@ -257,12 +257,12 @@ virtual instruction's opcode (a ID indicates which handler should use to
 interpret the virtual instruction) and their operand. \emph{DriverData2} has a different
 format compared to \emph{DriverData1}. The first data of \emph{DriverData2}
 is the handler's ID, The rest of \emph{DriverData2} include the
-offset value between two adjacent handlers (for example, handler21 and handler43 in Figure~\ref{fig:Fig.3}) and their operand.
+offset value between two adjacent handlers (for example, handler21 and handler43 in Figure~\ref{fig:Fig.dh}) and their operand.
 Recall that a control unit is inserted to the end of each handler. Before exiting the handler,
 if the control unit chooses to execute the next handler, it will fetch the corresponding offset value from \emph{DriverData2}.
 
 \DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
-Finally, scheduling structure of the \DSVMP with a single VM as an example, considering Figure~\ref{fig:Fig.3} that
+Finally, scheduling structure of the \DSVMP with a single VM as an example, considering Figure~\ref{fig:Fig.dh} that
 shows two possible program execution using three dispatchers and control unit in a single VM. As can be seen
 from the diagram, a handler can not only be scheduled through a dispatcher, but also can be scheduled by another handler,
 and the type of handlers to be invoked and he order they are called are different in two different execution runs.
@@ -280,7 +280,7 @@ Together with the above multiple scheduling approach, multiple VMs can further i
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=0.6\columnwidth]{figure/figmvm.pdf}\\
-  \caption{The structure of multiple VMs. Each VM has one set of unique handlers and two sets of bytecode instructions, \emph{DriverDataSetN1} and \emph{DriverDataSetN2}.}\label{fig:Fig.4}
+  \caption{The structure of multiple VMs. Each VM has one set of unique handlers and two sets of bytecode instructions, \emph{DriverDataSetN1} and \emph{DriverDataSetN2}.}\label{fig:Fig.mvm}
   %\vspace{-2mm}
 \end{figure}
 
@@ -301,7 +301,7 @@ To do so, we first calculate the address offet between the current VM and the VM
 %\FIXME
 We then store the value of the register \texttt{ESI} (a register points to the address of the current bytecode instruction)
 and change the pointer of the new bytecode address according to the offset value.
-Figure~\ref{fig:Fig.4} shows the multiple VM structure.
+Figure~\ref{fig:Fig.mvm} shows the multiple VM structure.
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
 across different code regions in both a single execution and across different program runs.
 
@@ -403,7 +403,7 @@ Here, our system inserts ``Instr.3" and ``Instr.4" in order to jump back to exec
 \end{table}
 
 After translating the native code to virtual instructions, we use the deformation engine to transform the initial bytecode handlers set. For this example, our system with 2 VMs configurations, so we generate two sets of bytecode handlers which are semantically equivalent but are implemented in different ways.
-Then we randomly shuffle the serial numbers of these handlers, resulting in two new sets of handlers: \texttt{HAS1} and \texttt{HAS2}.  Each set of bytecode handlers is associated with two bytecode instruction sets: \emph{DriverDataSet11} and \emph{DriverDataSet12} for \texttt{HSA1} and \emph{DriverDataSet21} and \emph{DriverDataSet22} for \texttt{HSA2}. The resulted program is illustrated in Figure~\ref{fig:Fig.5}. We store the virtual instructions in the bytecode format,
+Then we randomly shuffle the serial numbers of these handlers, resulting in two new sets of handlers: \texttt{HAS1} and \texttt{HAS2}.  Each set of bytecode handlers is associated with two bytecode instruction sets: \emph{DriverDataSet11} and \emph{DriverDataSet12} for \texttt{HSA1} and \emph{DriverDataSet21} and \emph{DriverDataSet22} for \texttt{HSA2}. The resulted program is illustrated in Figure~\ref{fig:Fig.ex}. We store the virtual instructions in the bytecode format,
 and will fill the critical code segment to be protected with junk instructions.
 
 Finally, \DSVMP create a new code section attached to the end of the target program.
@@ -414,7 +414,7 @@ dispatchers and other VM components such \texttt{VMContext} and routines such as
 
 
 \subsection{Runtime execution}
-Runtime execution of the protected code region is illustrated in Figure \ref{fig:Fig.5}, which follows a number of steps:
+Runtime execution of the protected code region is illustrated in Figure \ref{fig:Fig.ex}, which follows a number of steps:
 \begin{itemize}
 \item \textbf{Step1:} The entry of the protected code segment contains an ``\texttt{jmp VMInit}" instruction. This transfers the control to the VM initialization routine, \texttt{VMInit}, which saves the native host context and initializes the virtual context.
 \item \textbf{Step2:} Next, a dispatcher starts working. It randomly selects a VM, we assume that \texttt{VM2} is chosen at beginning, and then it fetches a bytecode from the \emph{DriverDataSet21}. After decoding, the dispatcher gets a bytecode ``\texttt{6a}". It then jumps to execute ``\texttt{0x6aHandler}", and the next bytecode ``\texttt{07}" is its operand.
@@ -430,7 +430,7 @@ Runtime execution of the protected code region is illustrated in Figure \ref{fig
   \centering
   % Requires \usepackage{graphicx}
   \includegraphics[width=0.7\columnwidth]{figure/figex.pdf}\\
-  \caption{The execution process of the protected program. Here each VM has two sets of bytecode instructions and one set of handlers.}\label{fig:Fig.5}
+  \caption{The execution process of the protected program. Here each VM has two sets of bytecode instructions and one set of handlers.}\label{fig:Fig.ex}
   %\vspace{-5mm}
 \end{figure}
 

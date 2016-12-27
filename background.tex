@@ -1,10 +1,16 @@
 \section{Background}\label{sec:bak}
 
+\begin{figure}[t]%
+    \centering
+    \includegraphics[width=1\columnwidth]{figure/figvmp.pdf}
+    \caption{The architecture of code virtualized obfuscation. The whole process is to encode the key code into a bytecode program and then rewrite it into a new section, along with the components that are required by the VM interpreter.}\label{fig:Fig.vmp}
+    %\vspace{-5mm}
+\end{figure}
+
 \subsection{VM-based Code Obfuscation}
 VM-based code obfuscation often performs at the binary level for an already
-compiled program. The obfuscation process typically follows a number of
-steps. \FIXME{We need a flow chart to explain the steps here.} Firstly, the
-critical code segment to be protected will be extracted from the compiled
+compiled program. As shown in figure~\ref{fig:Fig.vmp}, the obfuscation process typically follows a number of steps. 
+Firstly, the critical code segment to be protected will be extracted from the compiled
 binary, which will be dissembled into assembly code. Next, the native
 assembly code will translated into virtual instructions which are functional
 equivalent to original native code. Then, the
@@ -14,12 +20,13 @@ target program where the entry point of the protected code region will be
 redirected to a function call to invoke the VM to translate the virtual
 instructions to native machine code at runtime. The idea of VM-based code
 obfuscation is to force the attacker move from a familiar
-instruction set (e.g. x86) to an unfamiliar bespoke virtual instruction set. 
+instruction set (e.g. x86) to an unfamiliar bespoke virtual instruction set.
 
 
 \subsection{VM Components.} Our approach follows a classic VM implementation,
-consisting of a number of components. \FIXME{Need a diagram here to explain
-the components.} The context of the native program, which includes
+consisting of a number of components. 
+Specific components of the structure shown in the VM section at the fourth part of figure~\ref{fig:Fig.vmp}. 
+The context of the native program, which includes
 information such as local variables, function arguments, the return address etc.,
 will be stored in a register-based VM memory space called \texttt{VMContext}. When entering the VM, the \texttt{VMinit}
 component saves the native program context and initializes the
@@ -32,19 +39,19 @@ bytecode from the set of bytecode to be executed, decoding the fetched
 bytecode, and then assigning a handler (from a collection of handlers that can be used
 to interpret the bytecode)  to translate the fetched bytecode to native
 machine code. This process iterates until all the bytecode are executed.
-For the attacker's perspective, the key to understand the 
+For the attacker's perspective, the key to understand the
 logic of the protected code region is to find out how
-bytecode or virtual instructions are mapped into native machine code. 
+bytecode or virtual instructions are mapped into native machine code.
 
 \begin{figure}[t]%
     \centering
-    \includegraphics[width=0.7\columnwidth]{figure/figone.pdf}
-    \caption{Diversity affects  the attack effectiveness. In this example, a dark small square represents reusable attacking knowledge. Diverse program execution increases the difficulty for performing reverse-engineering based attacks.}\label{fig:Fig.1}
+    \includegraphics[width=0.7\columnwidth]{figure/figattack.pdf}
+    \caption{Diversity affects the attack effectiveness. In this example, a dark small square represents reusable attacking knowledge. Diverse program execution increases the difficulty for performing reverse-engineering based attacks.}\label{fig:Fig.attack}
     %\vspace{-5mm}
 \end{figure}
 
 \subsection{Our Aim}
-As a motivation example, consider Figure~\ref{fig:Fig.1} that illustrates how an attacker
+As a motivation example, consider Figure~\ref{fig:Fig.attack} that illustrates how an attacker
 can reuse knowledge extracted from the previous runs of the same application or
 other applications that are protected using the same VM scheme to perform an reverse-engineering attack.
 This kind of attacks is referred as \emph{cumulative attacks} in this paper.
@@ -54,6 +61,6 @@ obtain sufficient knowledge about the program behavior.
 In the second scenario, the program execution path changes across different runs.
 As such, it will take longer and many more runs to gather enough information to perform the attack.
 As can be seen from this simple illustration, diversity is key for us to protect software against dynamic cumulative attacks.
-This is the aim of this work, to improve the diversity of program executions for code obfuscation. 
+This is the aim of this work, to improve the diversity of program executions for code obfuscation.
 It is to note that like any other code protection techniques, our approach could be exploited by malware.
-How to prevent this is out of the scope of this work. 
+How to prevent this is out of the scope of this work.

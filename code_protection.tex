@@ -4,14 +4,14 @@ degree of diversity and uncertainty into program execution. This is achieved
 through using a diversified scheduling structure (Section~\ref {sec:dvs}) and
 multiple VMs (Section~\ref {sec:mvm}) in \DSVMP. Like other VM-based protection schemes,
 \DSVMP focuses on protecting critical code regions to minimize the runtime overhead.
-Figure~\ref{fig:Fig.2} depicts the system architecture of \DSVMP.
+Figure~\ref{fig:Fig.overview} depicts the system architecture of \DSVMP.
 Code protection of \DSVMP follows several steps described as follows:
 
 \begin{figure}[!t]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=0.7\columnwidth]{figure/figtwo.pdf}
-  \caption{Offline code protection process. \DSVMP takes in a program binary. For each protected code region, it translates native instructions into bytecodes. Next, it generates multiple bytecode handlers that are semantically equivalent but implemented in different ways. It then generates the corresponding driver-data and multiple VMs. Finally, the generated VMs and associated components will be inserted into the program binary and fills the original code region with junk instructions.}\label{fig:Fig.2}
+  \includegraphics[width=0.7\columnwidth]{figure/figoverview.pdf}
+  \caption{Offline code protection process. \DSVMP takes in a program binary. For each protected code region, it translates native instructions into bytecodes. Next, it generates multiple bytecode handlers that are semantically equivalent but implemented in different ways. It then generates the corresponding driver-data and multiple VMs. Finally, the generated VMs and associated components will be inserted into the program binary and fills the original code region with junk instructions.}\label{fig:Fig.overview}
   %\vspace{-5mm}
 \end{figure}
 
