@@ -3,13 +3,13 @@
 \begin{figure}[t]%
     \centering
     \includegraphics[width=1\columnwidth]{figure/figvmp.pdf}
-    \caption{The architecture of code virtualized obfuscation. The whole process is to encode the key code into a bytecode program and then rewrite it into a new section, along with the components that are required by the VM interpreter.}\label{fig:Fig.vmp}
+    \caption{VM-based code obfuscation. The obfuscation process includes (1) dissembling the critical code regions into native code, (2) translate the native code virtual instructions (3), and then storing the virtual instructions into bytecodes, before (4) then inserting the bytecode into a new section, along with a VM library.}\label{fig:Fig.vmp}
     %\vspace{-5mm}
 \end{figure}
 
 \subsection{VM-based Code Obfuscation}
 VM-based code obfuscation often performs at the binary level for an already
-compiled program. As shown in figure~\ref{fig:Fig.vmp}, the obfuscation process typically follows a number of steps. 
+compiled program. As shown in Figure~\ref{fig:Fig.vmp}, the obfuscation process typically follows a number of steps.
 Firstly, the critical code segment to be protected will be extracted from the compiled
 binary, which will be dissembled into assembly code. Next, the native
 assembly code will translated into virtual instructions which are functional
@@ -24,8 +24,8 @@ instruction set (e.g. x86) to an unfamiliar bespoke virtual instruction set.
 
 
 \subsection{VM Components.} Our approach follows a classic VM implementation,
-consisting of a number of components. 
-Specific components of the structure shown in the VM section at the fourth part of figure~\ref{fig:Fig.vmp}. 
+consisting of a number of components that are shown 
+in step 4 at Figure~\ref{fig:Fig.vmp}.
 The context of the native program, which includes
 information such as local variables, function arguments, the return address etc.,
 will be stored in a register-based VM memory space called \texttt{VMContext}. When entering the VM, the \texttt{VMinit}
