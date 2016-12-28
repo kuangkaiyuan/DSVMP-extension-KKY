@@ -132,7 +132,7 @@
 \begin{frontmatter}
 
 \title{
-Enhance Virtual-Machine-Based Code Obfuscation Security Through Dynamic Bytecode Scheduling
+Enhance Virtual-Machine-Based Code Obfuscation Security through Dynamic Bytecode Scheduling
 \footnote{
 Extension of Conference Paper: a preliminary version of this article entitled ``Exploiting Dynamic Scheduling for VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and
 Privacy in Computing and Communications(TrustCom), 2016~\cite{kuang2016exploiting}. The extended version makes the following additional contributions over the conference paper: (1) it provides a more detailed description of the background and threat model (Section~\ref{sec:bak} and~\ref{sec:attack}); (2) it describes how the virtual interpreter dynamically changes the execution path at runtime using an algorithmic model (Section~\ref{sec:mvm-2} and Algorithm~\ref{Alg:VMcore-work}); (3) it provides new experimental results to evaluate the overhead of the proposed technique, providing new insights of the approach (Section~\ref{sec:benchmarktest}); (4) it adds a new experiment to evaluate the diversity of the protected structure at runtime (Section~\ref{sec:s-d}); (5) it includes new results to compare the proposed approach against two commercial VM protection systems, Code Virtualizer and VMProtect (Section~\ref{sec:comparetest}).
@@ -190,7 +190,7 @@ Code virtualization \sep Code Obfuscation \sep Dynamic cumulative attack
 The \DSVMP VM scheduler uses multiple dispatchers to determine which bytecode instruction should be interpreted at given time.
 A unique design of \DSVMP is that the dispatcher used to schedule bytecode handlers will be dynamically changed at execution time. To further increase the diversity of program behaviour, \DSVMP also uses multiple bytecode instruction sets and bytecode handlers.
 
-\subsection{Multiple bytecode handlers}\label{sec:mb}
+\subsection{Multiple Bytecode Handlers}\label{sec:mb}
 
 \begin{figure}[t!]
 \scriptsize
@@ -220,21 +220,21 @@ add eax,9dH
 
 In classical VM-based code obfuscation, a single dispatcher is responsible for fetching a bytecode instruction and
 determining which bytecode handler should be used to interpret the bytecode. Because each bytecode instruction
-is decoded by a fixed handler set, an adversary can easily work out the mapping of a bytecode instruction and its
+is decoded by a fixed handler set, an adversary can easily work out the mapping from a bytecode instruction to its
 handler. From the mapping, the adversary can correlate the native machine code to each bytecode to analyze the
-program behavior and logic structure.
+program behavior and  the logic structure.
 
-To overcome this issue, for each bytecode handler, we create a number of alternative implementations which all
+To address this issue, for each bytecode handler, we generate a number of alternative implementations (through code obfuscation) which all
 produce an equivalent output for the same input. The alternative implementations, however,
 are implemented in different ways using e.g. different algorithms, data structures or obfuscation methods.
 
 We insert a control unit at the end of each bytecode handler. Before exiting a bytecode handler,
 the control unit randomly determines whether the control should be given to a dispatcher or
-another handler. Figure~\ref{fig:newhandler} shows an example of a \DSVMP bytecode handler's control unit.
+another handler. Figure~\ref{fig:newhandler} shows an example of the control unit of a \DSVMP bytecode handler.
 The control unit (lines 4-8) randomly determines to execute the code at line 9 or line 13.
 At line 9 , the ``\texttt{lods}" (a load operand in the x86 assembly) instruction fetch an offset value
 to calculate the address of an alternative bytecode handler and jump to execute it.
-By contrast, the instruction at line 13 will return to a dispatcher randomly.
+By contrast, the instruction at line 13 will return to a dispatcher.
 
 \begin{figure}[!t]
   \centering
@@ -245,14 +245,15 @@ By contrast, the instruction at line 13 will return to a dispatcher randomly.
   %\vspace{-3mm}
 \end{figure}
 
-\subsection{Special bytecodes program and multiple dispatchers}\label{sec:mbd}
-The bytecode program determines the execution order of handlers. Compared to a single bytecode program,
+\subsection{Special Bytecode Program and Multiple Dispatchers}\label{sec:mbd}
+The bytecode program  determines the execution order of handlers. Compared to a single bytecode program,
 multiple bytecode programs provide stronger protection because the execution path of handlers will be more dynamic.
-Hence, \DSVMP uses multiple bytecode programs.
+Hence, \DSVMP uses multiple bytecode programs. \FIXME{What's the difference between a bytecode program 
+and a dispatcher???}
 
-Our current implementation provides two bytecode instruction sets for each VM,
+Our current implementation uses two bytecode instruction sets for each VM,
 \emph{DriverData1} and \emph{DriverData2}. The \emph{DriverData1} is a
-standard bytecode program where each bytecode considers of the
+standard bytecode program where each bytecode consists of the
 virtual instruction's opcode (a ID indicates which handler should use to
 interpret the virtual instruction) and their operand. \emph{DriverData2} has a different
 format compared to \emph{DriverData1}. The first data of \emph{DriverData2}
