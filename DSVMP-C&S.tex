@@ -245,7 +245,7 @@ By contrast, the instruction at line 13 will return to a dispatcher.
   %\vspace{-3mm}
 \end{figure}
 
-\subsection{Special Bytecode Program and Multiple Dispatchers}\label{sec:mbd}
+\subsection{Bytecode Instructions and Dispatchers}\label{sec:mbd}
 Recall that the protected code regions will be translated into virtual
 instructions and stored in a bytcode format. The bytecode instructions
 determined which set of handlers to be invoked at runtime.  Having multiple
@@ -274,7 +274,7 @@ Therefore, knowledge about the program control flow extracted from the first run
 
 
 \section{Multiple VMs}\label{sec:mvm}
-In contrast to classical VM-based obfuscation approaches that uses a single VM (SVM), \DSVMP uses multiple VMs.
+In contrast to classical VM-based obfuscation approaches that uses a single VM (\emph{termed SVM}), \DSVMP uses multiple VMs.
 Multiple VMs offer different sets handlers and bytecode instruction sets. Under such settings,
 bytecode instructions can be scheduled from different VMs and a virtual instruction can be interpreted by more than one handler.
 Therefore, there will be more than one mapping from a bytecode instruction to handlers.
@@ -289,41 +289,49 @@ Together with the above multiple scheduling approach, multiple VMs can further i
 \end{figure}
 
 
-\subsection{Multiple VMs switch}
-We can determine the number of VM by ourselves when protecting target program.
-And then, according to the number of VM, the handler set is confused with the corresponding number of times
-and re allocation their opcode, then get multiple sets of equivalent but different forms of handlers.
-To review the section~\ref{sec:mbd}, for each set of handler sets,
-virtual instructions of the target code will be translated into two groups of special bytecode program.
-These bytecodes in different VM with semantics diversity,
-so there will be more than one mapping from a bytecodes to handlers.
+\subsection{Switching between Multiple VMs}
+The number of VMs to use is a  parameter that can be configured by the user. This number can vary 
+depending on the target program to be protected, and the trade-off between the protection strength and runtime overhead.
+As described in Section~\ref{sec:mbd}, we generate a set of handlers for each VM so that
+we have $n$ different sets of handlers for $n$ VMs. Our current implementation 
+also translates the virtual instructions of each handler set to stored as two different sets of bytecode.
+\FIXME{What exactly is the difference between virtual instructions and bytecode? We should have an example 
+earlier!!!!!!}
+Different bytecodes will have different semantics in different VMs. Therefore, 
+there have more than a bytecode could be translated by different handlers in different VMs.
 
-
-To schedule the multiple VMs, similar to the handler, we also add a switcher to alter the dispatcher structure.
-The dispatcher will has the function to determine which VM to use at runtime.
-To do so, we first calculate the address offet between the current VM and the VM to be used.
+Our system dynamically determines which VM to use at runtime. This is done through altering the structure of the instruction dispatcher 
+which decides which VM to use at runtime.
+To do so, we first calculate the address offset between the current VM and the next VM to use.
 %\FIXME
-We then store the value of the register \texttt{ESI} (a register points to the address of the current bytecode instruction)
-and change the pointer of the new bytecode address according to the offset value.
-Figure~\ref{fig:Fig.mvm} shows the multiple VM structure.
+Our implementation uses the x86 \texttt{ESI} register as a program counter to store the 
+address of the current bytecode instruction. In order to switch to another VM,
+we can simply sotre the address of the next VM into \texttt{ESI}.
+%We then store the value of the x86 register \texttt{ESI} (which is used as a program counter for storing the address of the current bytecode instruction)
+%and change the pointer of the new bytecode address according to the offset value.
+\FIXME{Is this ESI register implementation dependent? Could your implementation uses other registers? If so, explain this!!!}
+Figure~\ref{fig:Fig.mvm} shows the multiple VM structure. \FIXME{The diagram doesn't really say anything. We need to update it 
+to show the process of VM switching.}
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
 across different code regions in both a single execution and across different program runs.
 
-\subsection{Scheduling process of \DSVMP with multi-VMs}\label{sec:mvm-2}
-VM-based protection system uses its own virtual interpreter to interpret the special bytecode program into the native code
-(by scheduling various handlers to implement discrete sub operations) to realize the function of the original target code.
+\subsection{The VM Scheduling Process}\label{sec:mvm-2}
+%VM-based protection system uses its own virtual interpreter to interpret the special bytecode program into the native code
+%(by scheduling various handlers to implement discrete sub operations) to realize the function of the original target code.
 We add the special control unit in the execution process of virtual interpreter, its main works are as follows:
 \begin{itemize}
   \item structure control unit determines whether the control should be given to a dispatcher or another handler randomly.
   \item multi-VM switcher determines which VM to use at runtime randomly.
 \end{itemize}
+\FIXME{I have no idea of what you are talking here. Please rewrite the sentences to make it clear. Considering
+why you want to do this, what's the challenge of doing this, how did you solve these challenges?}
 
-In multiple VMs, all of the handler sets are semantic equivalence,
+In multiple VMs, all of the handler sets are semantic equivlant,
 so \DSVMP can ensure that the function of the target program is correct after randomly selecting.
 The collaboration of different components achieves the ultimate goal of the strong protection of the original target program,
 and the pseudo description of the \DSVMP virtual interpreter shown as follows:
 
-\begin{algorithm}
+\begin{algorithm}[t!]
 \caption{Virtual Interpreter's Work Flow\label{Alg:VMcore-work}}
 \begin{algorithmic}[1]
 %\REQUIRE
