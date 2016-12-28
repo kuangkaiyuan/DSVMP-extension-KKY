@@ -246,10 +246,13 @@ By contrast, the instruction at line 13 will return to a dispatcher.
 \end{figure}
 
 \subsection{Special Bytecode Program and Multiple Dispatchers}\label{sec:mbd}
-The bytecode program  determines the execution order of handlers. Compared to a single bytecode program,
-multiple bytecode programs provide stronger protection because the execution path of handlers will be more dynamic.
-Hence, \DSVMP uses multiple bytecode programs. \FIXME{What's the difference between a bytecode program 
-and a dispatcher???}
+Recall that the protected code regions will be translated into virtual
+instructions and stored in a bytcode format. The bytecode instructions
+determined which set of handlers to be invoked at runtime.  Having multiple
+bytecode instruction sets for a single code region can provide stronger protection
+because the execution path of handlers will be more dynamic. Hence, \DSVMP
+uses multiple bytecode instruction sets to store the virtual instructions for each
+code region.
 
 Our current implementation uses two bytecode instruction sets for each VM,
 \emph{DriverData1} and \emph{DriverData2}. The \emph{DriverData1} is a
