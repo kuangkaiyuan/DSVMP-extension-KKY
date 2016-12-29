@@ -266,11 +266,11 @@ Recall that a control unit is inserted to the end of each handler. Before exitin
 if the control unit chooses to execute the next handler, it will fetch the corresponding offset value from \emph{DriverData2}.
 
 \DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
-Finally, scheduling structure of the \DSVMP with a single VM as an example, considering Figure~\ref{fig:Fig.dh} that
-shows two possible program execution using three dispatchers and control unit in a single VM. As can be seen
-from the diagram, a handler can not only be scheduled through a dispatcher, but also can be scheduled by another handler,
-and the type of handlers to be invoked and he order they are called are different in two different execution runs.
-Therefore, knowledge about the program control flow extracted from the first run does not apply to the second one.
+As an example, considering  Figure~\ref{fig:Fig.dh} which
+shows two possible program execution paths using three dispatchers within a single VM. As can be seen
+from the diagram, a handler can either be invoked by a dispatcher or another handler;
+and the type of handlers to be invoked and the order they are called could be different in two different execution runs.
+As a result, knowledge about the program control flow extracted from the first run does not apply to the second one.
 
 
 \section{Multiple VMs}\label{sec:mvm}
@@ -290,27 +290,27 @@ Together with the above multiple scheduling approach, multiple VMs can further i
 
 
 \subsection{Switching between Multiple VMs}
-The number of VMs to use is a  parameter that can be configured by the user. This number can vary 
+The number of VMs to use is a  parameter that can be configured by the user. This number can vary
 depending on the target program to be protected, and the trade-off between the protection strength and runtime overhead.
 As described in Section~\ref{sec:mbd}, we generate a set of handlers for each VM so that
-we have $n$ different sets of handlers for $n$ VMs. Our current implementation 
+we have $n$ different sets of handlers for $n$ VMs. Our current implementation
 also translates the virtual instructions of each handler set to stored as two different sets of bytecode.
-\FIXME{What exactly is the difference between virtual instructions and bytecode? We should have an example 
+\FIXME{What exactly is the difference between virtual instructions and bytecode? We should have an example
 earlier!!!!!!}
-Different bytecodes will have different semantics in different VMs. Therefore, 
+Different bytecodes will have different semantics in different VMs. Therefore,
 there have more than a bytecode could be translated by different handlers in different VMs.
 
-Our system dynamically determines which VM to use at runtime. This is done through altering the structure of the instruction dispatcher 
+Our system dynamically determines which VM to use at runtime. This is done through altering the structure of the instruction dispatcher
 which decides which VM to use at runtime.
 To do so, we first calculate the address offset between the current VM and the next VM to use.
 %\FIXME
-Our implementation uses the x86 \texttt{ESI} register as a program counter to store the 
+Our implementation uses the x86 \texttt{ESI} register as a program counter to store the
 address of the current bytecode instruction. In order to switch to another VM,
 we can simply sotre the address of the next VM into \texttt{ESI}.
 %We then store the value of the x86 register \texttt{ESI} (which is used as a program counter for storing the address of the current bytecode instruction)
 %and change the pointer of the new bytecode address according to the offset value.
 \FIXME{Is this ESI register implementation dependent? Could your implementation uses other registers? If so, explain this!!!}
-Figure~\ref{fig:Fig.mvm} shows the multiple VM structure. \FIXME{The diagram doesn't really say anything. We need to update it 
+Figure~\ref{fig:Fig.mvm} shows the multiple VM structure. \FIXME{The diagram doesn't really say anything. We need to update it
 to show the process of VM switching.}
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
 across different code regions in both a single execution and across different program runs.
