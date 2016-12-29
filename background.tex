@@ -9,14 +9,15 @@
 
 \subsection{VM-based Code Obfuscation}
 VM-based code obfuscation often performs at the binary level for an already
-compiled program. As shown in Figure~\ref{fig:Fig.vmp}, the obfuscation process typically follows a number of steps.
-Firstly, the critical code segment to be protected will be extracted from the compiled
-binary, which will be dissembled into assembly code. Next, the native
-assembly code will translated into virtual instructions which are functional
-equivalent to original native code. Then, the
-generated virtual instructions will be encoded into the bespoke bytecode
-format.  Finally, a new VM section will be linked (or inserted) into the
-target program where the entry point of the protected code region will be
+compiled program. As shown in Figure~\ref{fig:Fig.vmp}, the obfuscation
+process typically follows a number of steps. Firstly, the critical code
+segment to be protected will be extracted from the compiled binary, which
+will be dissembled into assembly code. Next, the native assembly code will
+translated into virtual instructions (an machine-independent intermediate
+representation) which are functional equivalent to original native code.
+Then, the generated virtual instructions will be encoded into the bespoke
+bytecode format.  Finally, a new VM section will be linked (or inserted) into
+the target program where the entry point of the protected code region will be
 redirected to a function call to invoke the VM to translate the virtual
 instructions to native machine code at runtime. The idea of VM-based code
 obfuscation is to force the attacker move from a familiar
@@ -24,7 +25,7 @@ instruction set (e.g. x86) to an unfamiliar bespoke virtual instruction set.
 
 
 \subsection{VM Components.} Our approach follows a classic VM implementation,
-consisting of a number of components that are shown 
+consisting of a number of components that are shown
 in step 4 at Figure~\ref{fig:Fig.vmp}.
 The context of the native program, which includes
 information such as local variables, function arguments, the return address etc.,
@@ -35,8 +36,8 @@ native program context, and then returns the program control back to the
 original program to continue executing the rest of the program.
 At the heart of the VM is an interpreter consisting of a
 dispatcher and a handler set described as follows. The dispatcher fetches a
-bytecode from the set of bytecode to be executed, decoding the fetched
-bytecode, and then assigning a handler (from a collection of handlers that can be used
+bytecode that is ready to be exeucted, decoding the fetched
+bytecode (by parsing the opcode and the operand), and then assigning a handler (from a collection of handlers that can be used
 to interpret the bytecode)  to translate the fetched bytecode to native
 machine code. This process iterates until all the bytecode are executed.
 For the attacker's perspective, the key to understand the

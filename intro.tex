@@ -15,7 +15,7 @@ runtime to be executed on the underlying hardware platform. Using a VM-based
 scheme, the execution path of the obfuscated code is controlled by a virtual
 instruction scheduler. A typical scheduler consists of two components: a
 \emph{dispatcher} that determines which bytecode is ready for execution, and
-a set of \emph{bytecode handlers} that first decode the bytecode into virtual 
+a set of \emph{bytecode handlers} that first decode the bytecode into virtual
 instructions and then translate the virtual instructions to native
 machine code. This process replaces the original program instructions with
 bespoke bytecode, allowing developers to conceal the purpose or logic of
@@ -37,7 +37,7 @@ This paper presents \DSVMP (\emph{dynamic scheduling for VM-based code
 protection}), a novel VM-based code protection scheme to address the problem
 of cumulative attacks. Our key insight is that it will be more difficult for
 the attacker to track the application logic if sensitive code regions behave differently
-in different runs. \DSVMP achieves this by introducing rich non-deterministic and
+in different runs. \DSVMP achieves this by introducing rich non-determinism and
 diversity into program execution. To do so, it exploits a flexible,
 multi-dispatched scheme for code scheduling and interpretation. Unlike prior
 work where a program always follows a single, fixed execution path for the
@@ -54,20 +54,21 @@ This significantly increases the cost of code reverse-engineering.
 
 %Uncertainty and diversity are keys for deterring dynamic cumulative attacks.
 Dynamic instruction scheduling in \DSVMP is achieved through the combination of two techniques.
-Firstly, \DSVMP provides a rich set of bytecode handlers, which are implemented using different algorithms and data structures,
+Firstly, \DSVMP 
+provides a rich set of bytecode handlers, which have different control flows, 
 to translate a bytecode instruction to native code.
-Handlers for a particular bytecode all generate an identical output for the same input,
+Handlers for a particular bytecode opcode  all generate an identical native machine code for the same input,
 but their execution paths and data accessing patterns are different from each other.
 During runtime, our VM instruction scheduler randomly selects a  bytecode handler
-to translate a virtual instruction to the corresponding native machine code.
+to translate a bytecode to the corresponding native machine code.
 Since the choice of handlers is randomly determined at runtime for each bytecode
 instruction and the implementation of different handlers are different,
 the dynamic program execution path is likely to be different in different runs.
 Secondly, \DSVMP employs a multi-VM scheme so that various code regions
 can be protected using different bytecode instruction sets and VM implementations.
 This further increases diversity of the program, making it even harder for an adversary to analyze
-the software behavior or reuse knowledge extracted from other software products
--- as different products are likely to be protected by different bytecodes instructions and VM implementations.
+the software behavior or to reuse knowledge extracted from other software products.
+ This is because different products are likely to be protected using different bytecode forms and VM implementations.
 
 
 The whole is greater than the sum of the parts. These techniques, putting together,

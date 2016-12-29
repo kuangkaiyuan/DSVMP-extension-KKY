@@ -219,17 +219,19 @@ add eax,9dH
 \end{figure}
 
 In classical VM-based code obfuscation, a single dispatcher is responsible for fetching a bytecode instruction and
-determining which bytecode handler should be used to interpret the bytecode. Because each bytecode instruction
-is decoded by a fixed handler set, an adversary can easily work out the mapping from a bytecode instruction to its
+determining which bytecode handler should be used to interpret the instruction by checking the opcode of the bytecode
+instruction. 
+Because each bytecode instruction
+is decoded by a fixed handler set, an adversary can easily work out the mapping from an opcode to its
 handler. From the mapping, the adversary can correlate the native machine code to each bytecode to analyze the
 program behavior and  the logic structure.
 
-To address this issue, for each bytecode handler, we generate a number of alternative implementations (through code obfuscation) which all
-produce an equivalent output for the same input. The alternative implementations, however,
-are implemented in different ways using e.g. different algorithms, data structures or obfuscation methods.
+To address this issue, for each bytecode handler, we use obfuscation techniques to automatically generate a number of alternative implementations which all
+produce an equivalent output for the same input instruction. Different implementations, however,
+are programmed in different ways using e.g. different control flows, data structures or obfuscation methods.
 
-We insert a control unit at the end of each bytecode handler. Before exiting a bytecode handler,
-the control unit randomly determines whether the control should be given to a dispatcher or
+To control the program execution path, we insert a control unit at the end of each bytecode handler. Before exiting a bytecode handler,
+the control unit randomly determines whether the control should be given back to a dispatcher or
 another handler. Figure~\ref{fig:newhandler} shows an example of the control unit of a \DSVMP bytecode handler.
 The control unit (lines 4-8) randomly determines to execute the code at line 9 or line 13.
 At line 9 , the ``\texttt{lods}" (a load operand in the x86 assembly) instruction fetch an offset value
@@ -245,27 +247,36 @@ By contrast, the instruction at line 13 will return to a dispatcher.
   %\vspace{-3mm}
 \end{figure}
 
-\subsection{Bytecode Instructions and Dispatchers}\label{sec:mbd}
-Recall that the protected code regions will be translated into virtual
-instructions and stored in a bytcode format. The bytecode instructions
-determined which set of handlers to be invoked at runtime.  Having multiple
-bytecode instruction sets for a single code region can provide stronger protection
-because the execution path of handlers will be more dynamic. Hence, \DSVMP
-uses multiple bytecode instruction sets to store the virtual instructions for each
-code region.
+\subsection{Multiple Bytecode Formats and Dispatchers}\label{sec:mbd}
+\paragraph{Bytecode Formats} Using VM-based obfuscation, the protected code regions will be translated into virtual
+instructions and stored in a bytcode format. A handler will
+be chosen to decode the bytecode instruction to translate it
+to native machine code at runtime.  In classical VM-based
+code obfuscation approaches, there is one-one mapping from a 
+bytecode opcode to a handler, i.e. the bytecode opcode 
+determines which handler to be used. 
+Having multiple
+bytecode instruction sets for different code regions of a target program can provide stronger protection. 
+By doing so, the same opcode from different code region will have 
+different semantic meaning as the same opcode from different regions can be mapped into different handlers and hence different 
+native machine code. For this reason, the virtual instructions 
+of different  code regions will be stored in different bytecode formats. 
 
-Our current implementation uses two bytecode instruction sets for each VM,
-\emph{DriverData1} and \emph{DriverData2}. The \emph{DriverData1} is a
-standard bytecode program where each bytecode consists of the
+As a proof of concept, our current implementation uses two bytecode formats for each VM,
+namely \emph{DriverData1} and \emph{DriverData2}. Additional bytecode formats
+can be easily added to our system. 
+Here, \emph{DriverData1} is a
+standard bytecode format where each bytecode consists of the
 virtual instruction's opcode (a ID indicates which handler should use to
 interpret the virtual instruction) and their operand. \emph{DriverData2} has a different
 format compared to \emph{DriverData1}. The first data of \emph{DriverData2}
 is the handler's ID, The rest of \emph{DriverData2} include the
 offset value between two adjacent handlers (for example, handler21 and handler43 in Figure~\ref{fig:Fig.dh}) and their operand.
-Recall that a control unit is inserted to the end of each handler. Before exiting the handler,
+Recall that a control unit is inserted to the end of each handler to determine
+whether the control should be given back to the dispatcher or another handler.  Before exiting the handler,
 if the control unit chooses to execute the next handler, it will fetch the corresponding offset value from \emph{DriverData2}.
 
-\DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
+\paragraph{Dispatchers} \DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
 As an example, considering  Figure~\ref{fig:Fig.dh} which
 shows two possible program execution paths using three dispatchers within a single VM. As can be seen
 from the diagram, a handler can either be invoked by a dispatcher or another handler;
@@ -295,8 +306,6 @@ depending on the target program to be protected, and the trade-off between the p
 As described in Section~\ref{sec:mbd}, we generate a set of handlers for each VM so that
 we have $n$ different sets of handlers for $n$ VMs. Our current implementation
 also translates the virtual instructions of each handler set to stored as two different sets of bytecode.
-\FIXME{What exactly is the difference between virtual instructions and bytecode? We should have an example
-earlier!!!!!!}
 Different bytecodes will have different semantics in different VMs. Therefore,
 there have more than a bytecode could be translated by different handlers in different VMs.
 
