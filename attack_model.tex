@@ -2,7 +2,7 @@
 \subsection{Attacking methods}
 The classical approach to reverse engineer a VM-protected program typically
 follows three steps~\cite{10falliere2009inside,17rolles2009unpacking}, described as follows.
-The first step is to understand how each components of a VM interpreter works. 
+The first step is to understand how each components of a VM interpreter works.
 To do so, the attacker needs to locate
 these components and analyze how the dispatcher schedules bytecode instructions.
 The second step is to understand how each bytecode is mapped to machine code
@@ -12,20 +12,20 @@ logical of the target program, through removing the redundant information
 and restoring a program that is similar to the original program.
 
 
-To perform such an attack, a significant portion of the time will have to spend in analyzing the working 
+To perform such an attack, a significant portion of the time will have to spend in analyzing the working
 mechanism of the VM.
 The problem is that a skilled attacker could  reuse knowledge
 gathered from parts of the program to analyze other protected regions of
 the same program or other applications protected using the same VM scheme and bytecode instructions.
 
-\subsection{Threat model} 
-Our attack model assumes that the attacker has the necessary tools and skills to implement the above attacks.
+\subsection{Threat model}
+Our attack model assumes that the attacker has the necessary tools and skills to implement the above reverse-engineering based attacks.
 We assume the adversary holds an executable binary of the
 target software and can run the program in a control
 environment~\cite{11collberg2002watermarking}. We also assume the adversary
-can access content stored in memory and registers , trace program
-instructions, and modify the program instructions and control flows.
-All these can be achieved using advance tools like ``IDA"~\cite{14Idapro}, ``Ollydbg"~\cite{15Ollydbg} and
+can access content stored in memory and registers, trace and modify program
+instructions and control flows.
+All these can be achieved using profiling and analysis tools like ``IDA"~\cite{14Idapro}, ``Ollydbg"~\cite{15Ollydbg} and
 ``Sysinternals suite"~\cite{16Sysinternalssuite}. The aim of the adversary is
 to completely reverse the internal implementation of the target program.
 Our goal is to increase the difficulties in terms of time and efforts for an adversary to

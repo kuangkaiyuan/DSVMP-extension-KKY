@@ -15,9 +15,10 @@ runtime to be executed on the underlying hardware platform. Using a VM-based
 scheme, the execution path of the obfuscated code is controlled by a virtual
 instruction scheduler. A typical scheduler consists of two components: a
 \emph{dispatcher} that determines which bytecode is ready for execution, and
-a set of \emph{bytecode handlers} that translate bytecodes into native
+a set of \emph{bytecode handlers} that first decode the bytecode into virtual 
+instructions and then translate the virtual instructions to native
 machine code. This process replaces the original program instructions with
-bespoke bytecodes, allowing developers to conceal the purpose or logic of
+bespoke bytecode, allowing developers to conceal the purpose or logic of
 sensitive code regions.
 
 Prior work on VM-based software protection primarily focuses on making a
