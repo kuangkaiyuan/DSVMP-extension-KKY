@@ -220,7 +220,7 @@ add eax,9dH
 
 In classical VM-based code obfuscation, a single dispatcher is responsible for fetching a bytecode instruction and
 determining which bytecode handler should be used to interpret the instruction by checking the opcode of the bytecode
-instruction. 
+instruction.
 Because each bytecode instruction
 is decoded by a fixed handler set, an adversary can easily work out the mapping from an opcode to its
 handler. From the mapping, the adversary can correlate the native machine code to each bytecode to analyze the
@@ -252,19 +252,19 @@ By contrast, the instruction at line 13 will return to a dispatcher.
 instructions and stored in a bytcode format. A handler will
 be chosen to decode the bytecode instruction to translate it
 to native machine code at runtime.  In classical VM-based
-code obfuscation approaches, there is one-one mapping from a 
-bytecode opcode to a handler, i.e. the bytecode opcode 
-determines which handler to be used. 
+code obfuscation approaches, there is one-one mapping from a
+bytecode opcode to a handler, i.e. the bytecode opcode
+determines which handler to be used.
 Having multiple
-bytecode instruction sets for different code regions of a target program can provide stronger protection. 
-By doing so, the same opcode from different code region will have 
-different semantic meaning as the same opcode from different regions can be mapped into different handlers and hence different 
-native machine code. For this reason, the virtual instructions 
-of different  code regions will be stored in different bytecode formats. 
+bytecode instruction sets for different code regions of a target program can provide stronger protection.
+By doing so, the same opcode from different code region will have
+different semantic meaning as the same opcode from different regions can be mapped into different handlers and hence different
+native machine code. For this reason, the virtual instructions
+of different  code regions will be stored in different bytecode formats.
 
 As a proof of concept, our current implementation uses two bytecode formats for each VM,
 namely \emph{DriverData1} and \emph{DriverData2}. Additional bytecode formats
-can be easily added to our system. 
+can be easily added to our system.
 Here, \emph{DriverData1} is a
 standard bytecode format where each bytecode consists of the
 virtual instruction's opcode (a ID indicates which handler should use to
@@ -285,7 +285,7 @@ As a result, knowledge about the program control flow extracted from the first r
 
 
 \section{Multiple VMs}\label{sec:mvm}
-In contrast to classical VM-based obfuscation approaches that uses a single VM (\emph{termed SVM}), \DSVMP uses multiple VMs.
+In contrast to classical VM-based obfuscation approaches that uses a single VM, \DSVMP uses multiple VMs.
 Multiple VMs offer different sets handlers and bytecode instruction sets. Under such settings,
 bytecode instructions can be scheduled from different VMs and a virtual instruction can be interpreted by more than one handler.
 Therefore, there will be more than one mapping from a bytecode instruction to handlers.
@@ -300,22 +300,22 @@ Together with the above multiple scheduling approach, multiple VMs can further i
 \end{figure}
 
 
-\subsection{Switching between Multiple VMs}
-The number of VMs to use is a  parameter that can be configured by the user. This number can vary
+\subsection{Switching between VMs}
+In \DSVMP, the number of VMs to use is a  parameter that can be configured by the user. This number can vary
 depending on the target program to be protected, and the trade-off between the protection strength and runtime overhead.
 As described in Section~\ref{sec:mbd}, we generate a set of handlers for each VM so that
 we have $n$ different sets of handlers for $n$ VMs. Our current implementation
-also translates the virtual instructions of each handler set to stored as two different sets of bytecode.
-Different bytecodes will have different semantics in different VMs. Therefore,
-there have more than a bytecode could be translated by different handlers in different VMs.
+also stores the virtual instructions of each protected code region using two different bytecode formats. 
+The same opcode will have different semantics in different VMs. 
 
-Our system dynamically determines which VM to use at runtime. This is done through altering the structure of the instruction dispatcher
-which decides which VM to use at runtime.
-To do so, we first calculate the address offset between the current VM and the next VM to use.
+Our system dynamically determines which VM to use to translate a bytecode at runtime. 
+This is done through altering the structure of the instruction dispatcher
+which decides which VM to use.
+To switch to another VM, we first calculate the address offset between the current VM and the next VM to use.
 %\FIXME
 Our implementation uses the x86 \texttt{ESI} register as a program counter to store the
 address of the current bytecode instruction. In order to switch to another VM,
-we can simply sotre the address of the next VM into \texttt{ESI}.
+we can simply store the address of the next VM into \texttt{ESI}.
 %We then store the value of the x86 register \texttt{ESI} (which is used as a program counter for storing the address of the current bytecode instruction)
 %and change the pointer of the new bytecode address according to the offset value.
 \FIXME{Is this ESI register implementation dependent? Could your implementation uses other registers? If so, explain this!!!}
@@ -323,6 +323,8 @@ Figure~\ref{fig:Fig.mvm} shows the multiple VM structure. \FIXME{The diagram doe
 to show the process of VM switching.}
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
 across different code regions in both a single execution and across different program runs.
+\FIXME{Since each VM has its handler set, how can you guarantee the same bytecode will give the same 
+native code in different VMs? -- This section needs a lot of attentions. }
 
 \subsection{The VM Scheduling Process}\label{sec:mvm-2}
 %VM-based protection system uses its own virtual interpreter to interpret the special bytecode program into the native code
