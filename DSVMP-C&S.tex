@@ -205,12 +205,13 @@ cmp edx,0
 jz label                 ;------------------------
 lods dword ptr ds:[esi]
 ... ...                  ; to the next handler
-add dword ptr ds:[edi+48],eax
-jmp dword ptr ds:[edi+48]
+add dword ptr ds:[edi+0x60],eax
+jmp dword ptr ds:[edi+0x60]
 label: push ebx          ;------------------------
 div bl
 movzx eax,AH             ; return to a dispatcher
 add eax,9dH
+... ...
 \end{lstlisting}
 %\vspace{-2mm}
 \caption{Each bytecode handler has a control unit that randomly determines whether the control after exiting the handler should be given to a dispatcher or an alternative bytecode handler. }
@@ -285,62 +286,87 @@ As a result, knowledge about the program control flow extracted from the first r
 
 
 \section{Multiple VMs}\label{sec:mvm}
-In contrast to classical VM-based obfuscation approaches that uses a single VM, \DSVMP uses multiple VMs.
+In contrast to classical VM-based obfuscation approaches that uses a single VM (\emph{termed SVM}), \DSVMP uses multiple VMs.
 Multiple VMs offer different sets handlers and bytecode instruction sets. Under such settings,
 bytecode instructions can be scheduled from different VMs and a virtual instruction can be interpreted by more than one handler.
 Therefore, there will be more than one mapping from a bytecode instruction to handlers.
 Together with the above multiple scheduling approach, multiple VMs can further increase the diversity and uncertainly of program execution.
 
-\begin{figure}[!t]
-  \centering
-  % Requires \usepackage{graphicx}
-  \includegraphics[width=0.6\columnwidth]{figure/figmvm.pdf}\\
-  \caption{The structure of multiple VMs. Each VM has one set of unique handlers and two sets of bytecode instructions, \emph{DriverDataSetN1} and \emph{DriverDataSetN2}.}\label{fig:Fig.mvm}
-  %\vspace{-2mm}
-\end{figure}
+%\begin{figure}[!t]
+%  \centering
+% % Requires \usepackage{graphicx}
+%  \includegraphics[width=0.6\columnwidth]{figure/figmvm.pdf}\\
+%  \caption{The structure of multiple VMs. Each VM has one set of unique handlers and two sets of bytecode instructions, \emph{DriverDataSetN1} and \emph{DriverDataSetN2}.}\label{fig:Fig.mvm}
+ %\vspace{-2mm}
+%\end{figure}
 
 
-\subsection{Switching between VMs}
-In \DSVMP, the number of VMs to use is a  parameter that can be configured by the user. This number can vary
+\subsection{Switching between Multiple VMs}
+The number of VMs to use is a  parameter that can be configured by the user. This number can vary
 depending on the target program to be protected, and the trade-off between the protection strength and runtime overhead.
 As described in Section~\ref{sec:mbd}, we generate a set of handlers for each VM so that
 we have $n$ different sets of handlers for $n$ VMs. Our current implementation
-also stores the virtual instructions of each protected code region using two different bytecode formats. 
-The same opcode will have different semantics in different VMs. 
+also translates the virtual instructions of each handler set to stored as two different sets of bytecode.
+Different bytecodes will have different semantics in different VMs. Therefore,
+there have more than a bytecode could be translated by different handlers in different VMs.
 
-Our system dynamically determines which VM to use to translate a bytecode at runtime. 
-This is done through altering the structure of the instruction dispatcher
-which decides which VM to use.
-To switch to another VM, we first calculate the address offset between the current VM and the next VM to use.
-%\FIXME
-Our implementation uses the x86 \texttt{ESI} register as a program counter to store the
-address of the current bytecode instruction. In order to switch to another VM,
-we can simply store the address of the next VM into \texttt{ESI}.
-%We then store the value of the x86 register \texttt{ESI} (which is used as a program counter for storing the address of the current bytecode instruction)
-%and change the pointer of the new bytecode address according to the offset value.
-\FIXME{Is this ESI register implementation dependent? Could your implementation uses other registers? If so, explain this!!!}
-Figure~\ref{fig:Fig.mvm} shows the multiple VM structure. \FIXME{The diagram doesn't really say anything. We need to update it
-to show the process of VM switching.}
+\begin{figure}[t!]
+\scriptsize
+\begin{lstlisting}
+push edx                           ;------------------------
+rdtsc
+xor edx,edx
+div dword ptr ds:[edi+0x58]        ;VM switching unit
+mov eax,edx
+sub edx,dword ptr ds:[edi+0x50]
+je label                           ;------------------------
+imul edx,dword ptr ds:[edi+0x54]   ;Modify the VM PC and
+add esi,edx                        ;save the current VM ID
+mov dword ptr ds:[edi+0x50],eax
+label: lods byte ptr ds:[esi]      ;------------------------
+... ...                            ;Fetch the bytecode and
+movzx eax,al                       ;dispatch a Handler
+add eax,edx                        ;to interpret it
+pop edx
+jmp dword ptr ds:[edi+eax*4+0x60]
+\end{lstlisting}
+%\vspace{-2mm}
+\caption{The new dispatcher has a VM switch unit that can randomly select one of the multiple VMs to continue scheduling handler.}
+%\vspace{-5mm}
+\label{fig:mvmswitcher}
+\end{figure}
+
+Our system dynamically determines which VM to use at runtime.
+This is done through altering the structure of the instruction dispatcher which decides which VM to use at runtime.
+Figure~\ref{fig:mvmswitcher} shows an example of the new dispatcher structure,
+which has a VM switch unit that can randomly select one of the multiple VMs to continue scheduling handler.
+To do so, The switching unit first randomly selects one VM among the multiple VMs (lines 1-7),
+and then modifies the program counter to point to the target VM (lines 8-10).
+Our implementation uses the x86 \texttt{ESI} register as a virtual program counter (VM PC) to point the
+address of the next bytecode instruction.
+We chose \texttt{ESI} in order not to interfere with the use of some commonly used registers,
+such as, the program counter pointer (\texttt{EIP}), stack pointer (\texttt{ESP}),
+and some commonly used registers in arithmetic operations(\texttt{EAX}, \texttt{EBX}), etc.
+Finally, dispatcher fetches a bytecode according to the modified VM PC and
+dispatches the handler to interpret it in the corresponding VM (lines 11-16).
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
 across different code regions in both a single execution and across different program runs.
-\FIXME{Since each VM has its handler set, how can you guarantee the same bytecode will give the same 
-native code in different VMs? -- This section needs a lot of attentions. }
 
 \subsection{The VM Scheduling Process}\label{sec:mvm-2}
-%VM-based protection system uses its own virtual interpreter to interpret the special bytecode program into the native code
-%(by scheduling various handlers to implement discrete sub operations) to realize the function of the original target code.
-We add the special control unit in the execution process of virtual interpreter, its main works are as follows:
+Our goal is to provide runtime scheduling diversity to enhance code virtualization protection.
+As described in the previous section, we use the flexible handler scheduling and Multiple VMs to achieve this goal,
+and in order to achieve a new scheduling approach, we have further improved the virtual interpreter,
+respectively, added the following special structural unit:
 \begin{itemize}
-  \item structure control unit determines whether the control should be given to a dispatcher or another handler randomly.
-  \item multi-VM switcher determines which VM to use at runtime randomly.
+  \item Add a Structure control unit for handler, which determines whether the control should be given to a dispatcher or another handler randomly.
+  \item Add a VM switching unit for diapatcher, which determines which VM to use at runtime randomly.
 \end{itemize}
-\FIXME{I have no idea of what you are talking here. Please rewrite the sentences to make it clear. Considering
-why you want to do this, what's the challenge of doing this, how did you solve these challenges?}
 
-In multiple VMs, all of the handler sets are semantic equivlant,
-so \DSVMP can ensure that the function of the target program is correct after randomly selecting.
-The collaboration of different components achieves the ultimate goal of the strong protection of the original target program,
-and the pseudo description of the \DSVMP virtual interpreter shown as follows:
+Therefore, unlike the traditional virtual interpreter's single scheduling structure, 
+\DSVMP's virtual interpreter with dynamic diversity, 
+it can randomly change the program scheduling and execution path at runtime. 
+The pseudo description of the \DSVMP virtual interpreter shown as Algorithm~\ref{Alg:VMcore-work}.
+
 
 \begin{algorithm}[t!]
 \caption{Virtual Interpreter's Work Flow\label{Alg:VMcore-work}}
@@ -356,7 +382,7 @@ and the pseudo description of the \DSVMP virtual interpreter shown as follows:
 \STATE Control unit randomly transfer control
 \IF {Choose the \texttt{dispatcher}}
 \STATE Select a dispatcher randomly
-\STATE Switcher selects a VM randomly
+\STATE Switching unit selects a VM randomly
 \STATE Fetch the next bytecode from \emph{DriverData1} in current VM
 \ELSE [Choose the next \texttt{handler}]
 \STATE Fetch the next bytecode from \emph{DriverData2} in current VM

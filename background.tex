@@ -18,7 +18,7 @@ representation) which are functional equivalent to original native code.
 Then, the generated virtual instructions will be encoded into the bespoke
 bytecode format.  Finally, a new VM section will be linked (or inserted) into
 the target program where the entry point of the protected code region will be
-redirected to a function call to invoke the VM to translate the virtual
+redirected to a function call to invoke the VM to translate the bytecode
 instructions to native machine code at runtime. The idea of VM-based code
 obfuscation is to force the attacker move from a familiar
 instruction set (e.g. x86) to an unfamiliar bespoke virtual instruction set.

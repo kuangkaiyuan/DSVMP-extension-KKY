@@ -14,10 +14,10 @@ These virtual bytecodes will then be translated into native machine code at
 runtime to be executed on the underlying hardware platform. Using a VM-based
 scheme, the execution path of the obfuscated code is controlled by a virtual
 instruction scheduler. A typical scheduler consists of two components: a
-\emph{dispatcher} that determines which bytecode is ready for execution, and
-a set of \emph{bytecode handlers} that first decode the bytecode into virtual
-instructions and then translate the virtual instructions to native
-machine code. This process replaces the original program instructions with
+\emph{dispatcher} that determines which bytecode is ready for execution, 
+and a set of \emph{bytecode handlers} that first decode the bytecode 
+and then translate it into native machine code. 
+This process replaces the original program instructions with
 bespoke bytecode, allowing developers to conceal the purpose or logic of
 sensitive code regions.
 
@@ -54,8 +54,8 @@ This significantly increases the cost of code reverse-engineering.
 
 %Uncertainty and diversity are keys for deterring dynamic cumulative attacks.
 Dynamic instruction scheduling in \DSVMP is achieved through the combination of two techniques.
-Firstly, \DSVMP 
-provides a rich set of bytecode handlers, which have different control flows, 
+Firstly, \DSVMP
+provides a rich set of bytecode handlers, which have different control flows,
 to translate a bytecode instruction to native code.
 Handlers for a particular bytecode opcode  all generate an identical native machine code for the same input,
 but their execution paths and data accessing patterns are different from each other.
@@ -92,4 +92,4 @@ Section~\ref{sec:overview} gives an overview of \DSVMP,
 which is followed by a detailed description of the design in Section~\ref{sec:dvs} and~\ref{sec:mvm}.
 Section~\ref{sec:case} uses a case study to demonstrate protection scheme provided by \DSVMP.
 Evaluation results are presented in Sections~\ref{sec:s-eva} and~\ref{sec:p-eva} before we discuss the related work
-in Section~\ref{sec:work}. Finally, Section~\ref{sec:con} presents our work conclusions. 
+in Section~\ref{sec:work}. Finally, Section~\ref{sec:con} presents our work conclusions.
