@@ -3,9 +3,9 @@ To address the problem of cumulative attacks, we want to introduce a certain
 degree of diversity and non-determinism to the program execution path. This is achieved
 through using a diversified scheduling structure (Section~\ref {sec:dvs}) and
 multiple VMs (Section~\ref {sec:mvm}). Like any VM-based protection schemes,
-\DSVMP is supposed to be use for protecting the most critical code regions but not the entire program, in order to minimize the runtime overhead.
-Our current implementation targets the x86 instruction set but the methodology itself can be
-applied to other architectures.
+\DSVMP should be used to protect the most critical code regions but not the entire program, in order to minimize the runtime overhead.
+Our current implementation targets the Intel x86 instruction set but the methodology itself can be
+applied to other instruction sets and hardware architectures.
 
 
 Figure~\ref{fig:Fig.overview} depicts the system architecture of \DSVMP.
@@ -42,8 +42,8 @@ Next, the virtual instructions will be encoded into an unique bytecode form for 
 VMs will be mapped into different native machine instructions to protect against static analysis.
 Our preliminary implementation provides two sets of bytecode in a VM. Therefore, each
 virtual instruction can be encoded into two different sets of bytecode forms in a VM(Step \ding{186}).
-After these steps, \DSVMP essentially provides multiple VMs, 
-where each VM contains one set of bytecode handlers (so that a virtual instruction can be interpreted by multiple handlers), 
+After these steps, \DSVMP essentially provides multiple VMs,
+where each VM contains one set of bytecode handlers (so that a virtual instruction can be interpreted by multiple handlers),
 while the instructions of the protected code regions are stored in different bytecode forms (Step \ding{187}).
 
 \paragraph*{Code generation}
