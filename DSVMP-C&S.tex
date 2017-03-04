@@ -192,31 +192,39 @@ A unique design of \DSVMP is that the dispatcher used to schedule bytecode handl
 
 \subsection{Multiple Bytecode Handlers}\label{sec:mb}
 
-\begin{figure}[t!]
-\scriptsize
-\begin{lstlisting}
-lods byte/word/dword ptr ds:[esi]
-... ...
-push eax
-rdtsc                    ;------------------------
-mov ecx,2
-div ecx                  ;structure control unit
-cmp edx,0
-jz label                 ;------------------------
-lods dword ptr ds:[esi]
-... ...                  ; to the next handler
-add dword ptr ds:[edi+0x60],eax
-jmp dword ptr ds:[edi+0x60]
-label: push ebx          ;------------------------
-div bl
-movzx eax,AH             ; return to a dispatcher
-add eax,9dH
-... ...
-\end{lstlisting}
+%\begin{figure}[t!]
+%\scriptsize
+%\begin{lstlisting}
+%lods byte/word/dword ptr ds:[esi]
+%... ...
+%push eax
+%rdtsc                    ;------------------------
+%mov ecx,2
+%div ecx                  ;structure control unit
+%cmp edx,0
+%jz label                 ;------------------------
+%lods byte ptr ds:[esi]
+%... ...                  ; to the next handler
+%add dword ptr ds:[edi+0x60],eax
+%jmp dword ptr ds:[edi+0x60]
+%label: push ebx          ;------------------------
+%div bl
+%movzx eax,AH             ; return to a dispatcher
+%add eax,9dH
+%... ...
+%\end{lstlisting}
 %\vspace{-2mm}
-\caption{Each bytecode handler has a control unit that randomly determines whether the control after exiting the handler should be given to a dispatcher or an alternative bytecode handler. }
+%\caption{Each bytecode handler has a control unit that randomly determines whether the control after exiting the handler should be given to a dispatcher or an alternative bytecode handler. }
 %\vspace{-5mm}
-\label{fig:newhandler}
+%\label{fig:newhandler}
+%\end{figure}
+\begin{figure}[!t]
+  \centering
+  % Requires \usepackage{graphicx}
+  \includegraphics[width=0.9\columnwidth]{figure/fighandler.pdf}
+  %\vspace{-1mm}
+  \caption{The execution flow of the new handler, each bytecode handler has a control unit that randomly determines whether the control after exiting the handler should be given to a dispatcher or an alternative bytecode handler.}\label{fig:newhandler}
+  %\vspace{-3mm}
 \end{figure}
 
 In classical VM-based code obfuscation, a single dispatcher is responsible for fetching a bytecode instruction and
@@ -231,23 +239,22 @@ To address this issue, for each bytecode handler, we use obfuscation techniques 
 produce an equivalent output for the same input instruction. Different implementations, however,
 are programmed in different ways using e.g. different control flows, data structures or obfuscation methods.
 
-To control the program execution path, we insert a control unit at the end of each bytecode handler. Before exiting a bytecode handler,
-the control unit randomly determines whether the control should be given back to a dispatcher or
-another handler. Figure~\ref{fig:newhandler} shows an example of the control unit of a \DSVMP bytecode handler.
-The control unit (lines 4-8) randomly determines to execute the code at line 9 or line 13.
-At line 9 , the ``\texttt{lods}" (a load operand in the x86 assembly) instruction fetch an offset value
-to calculate the address of an alternative bytecode handler and jump to execute it.
-By contrast, the instruction at line 13 will return to a dispatcher.
+To control the program execution path, we insert a control unit at the end of each bytecode handler.
+Before exiting a bytecode handler, the control unit randomly determines whether the control should be given back to a dispatcher or
+another handler.
+Figure~\ref{fig:newhandler} shows an example of the control unit of a \DSVMP bytecode handler.
+When the main function of the handler is finished, the control unit randomly determines to execute the code in different branch.
+At the first branch, the ``\texttt{lods}" (a load operand in the x86 assembly) instruction fetch an offset value from \emph{Offset Bytecode} to calculate the address of the nest bytecode handler and jump to execute it.
+By contrast, the instruction at another branch will return to a dispatcher.
+Figure~\ref{fig:Fig.dh} shows two different dynamic scheduling results, under the action of the control unit, a handler can either be invoked by a dispatcher or another handler.
+The \emph{Offset Bytecode} here is different from the usual standard bytecode, which is designed to drive the handler's dispatch function, and we will describe in detail in the next section.
 
 \begin{figure}[!t]
   \centering
   % Requires \usepackage{graphicx}
-  \includegraphics[width=0.65\columnwidth]{figure/figdh.pdf}
+  \includegraphics[width=0.7\columnwidth]{figure/figdh.pdf}
   %\vspace{-1mm}
-  \caption{Our approach employes multiple dispatchers together with a control unit to schedule the handlers. In this example, the type of handlers and the order for invoking the handlers could be different across execution runs. 
-    \FIXME{Which one is DriverData1 and which is DriverData2? I think we will need a better name! E.g. Standard Bytecode and xxx Bytecode. DriverDatax doesn't say anything. This diagram needs to get updated and it 
-    should links to the example given in figure 4. }
-  }\label{fig:Fig.dh}
+  \caption{Our approach employes multiple dispatchers together with a control unit to schedule the handlers. In this example, the type of handlers and the order for invoking the handlers could be different across execution runs. The ``XX" in bytecode refers to the parameters. Underlined two bytecodes is handler43 encoding results in two types of \emph{Bytecode} respectively}\label{fig:Fig.dh}
   %\vspace{-3mm}
 \end{figure}
 
@@ -259,31 +266,28 @@ to native machine code at runtime.  In classical VM-based
 code obfuscation approaches, there is one-one mapping from a
 bytecode opcode to a handler, i.e. the bytecode opcode
 determines which handler to be used.
-Having multiple
-bytecode instruction sets for different code regions of a target program can provide stronger protection.
+Having multiple bytecode instruction sets for different code regions of a target program can provide stronger protection.
 By doing so, the same opcode from different code region will have
 different semantic meaning as the same opcode from different regions can be mapped into different handlers and hence different
 native machine code. For this reason, the virtual instructions
-of different  code regions will be stored in different bytecode formats.
+of different code regions will be stored in different bytecode formats.
 
-As a proof of concept, our current implementation uses two bytecode formats for each VM, namely \emph{DriverData1} and
-\emph{DriverData2}. Additional bytecode formats can be easily added to our system. Here, \emph{DriverData1} is a
+Our current implementation uses two bytecode formats for each VM, namely \emph{Standard Bytecode} and
+\emph{Offset Bytecode}. Additional bytecode formats can be easily added to our system. Here, \emph{Standard Bytecode} is a
 standard bytecode format where each bytecode consists of the virtual instruction's opcode (a ID indicates which handler
-should use to interpret the virtual instruction) and their operand. \emph{DriverData2} uses a different encoding
-scheme. Each \emph{DriverData2} bytecode composites three parts of data. 
-The first part is a handler's ID. The second and the third part sis \FIXME{the offset address/IDs??} of two adjacent handlers (for example, handler21 and handler43 in Figure~\ref{fig:Fig.dh})
-and their operands respectively. \FIXME{This is really confusing. We need a concrete example. E.g. how will the example
-shown in figure 4 be encoded in \emph{DriverData2} ???}
+should use to interpret the virtual instruction) and their operand (if they have), at rumtime, dispatcher will fetch the bytecode from it. \emph{Offset Bytecode} uses a different encoding scheme, which is fetched by the handler's control unit.
+Each \emph{Offset Bytecode} consists of the offset IDs of two adjacent handlers (for example, when handler21 direct transfer control to handler43 in Figure~\ref{fig:Fig.dh}, fetched offset bytecode is ``22") and their operands respectively.
 Recall that a control unit is inserted to the end of each handler to determine whether the control should be
 given back to the dispatcher or another handler.  Before exiting the handler, if the control unit chooses to execute
-the next handler, it will fetch the corresponding offset value from \emph{DriverData2}.
+the next handler, it will fetch the corresponding offset value from \emph{Offset Bytecode}.
 
-\paragraph{Dispatchers} \DSVMP also provides multiple dispatchers to further increase the diversity of program
-execution. As an example, considering  Figure~\ref{fig:Fig.dh} which shows two possible program execution paths using
-three dispatchers within a single VM. As can be seen from the diagram, a handler can either be invoked by a dispatcher
-or another handler; and the type of handlers to be invoked and the order they are called could be different in two
-different execution runs. As a result, knowledge about the program control flow extracted from the first run does not
-apply to the second one.
+\paragraph{Dispatchers} \DSVMP also provides multiple dispatchers to further increase the diversity of program execution.
+As an example, considering Figure~\ref{fig:Fig.dh} which shows two possible program execution paths using
+three dispatchers within a single VM. As can be seen from the diagram,
+each time you can choose a different dispatcher to schedule the handler,
+coupled with the control unit, a handler can either be invoked by a dispatcher or another handler;
+the type of handlers to be invoked could be different in two different execution runs.
+As a result, knowledge about the program control flow extracted from the first run does not apply to the second one.
 
 
 \section{Multiple VMs}\label{sec:mvm}
@@ -342,10 +346,10 @@ This is done through altering the structure of the instruction dispatcher which 
 Figure~\ref{fig:mvmswitcher} shows an example of the new dispatcher structure,
 which has a VM switch unit that can randomly select one of the multiple VMs to continue scheduling handler.
 To do so, The switching unit first randomly selects one VM among the multiple VMs (lines 1-7),
-and then modifies the program counter to point to the target VM (lines 8-10).
-\FIXME{The assembly code is impossible to understand. Could you put a pseudo-code (or a diagram) along slide the assembly code to explain how the value of ESI is changed?} 
-Our implementation uses the x86 \texttt{ESI} register as a virtual program counter (\texttt{VM PC}) to store the
-address of the next bytecode instruction. Other registers can also be used for this purpose. 
+and then modifies the virtual program counter (\texttt{VM PC}) to point to the target VM (lines 8-10).
+%\FIXME{The assembly code is impossible to understand. Could you put a pseudo-code (or a diagram) along slide the assembly code to explain how the value of ESI is changed?}
+Our implementation uses the x86 \texttt{ESI} register as a \texttt{VM PC} to store the
+address of the next bytecode instruction. Other registers can also be used for this purpose.
 Finally, the dispatcher fetches a bytecode according to the modified \texttt{VM PC} and
 dispatches the handler to interpret it in the corresponding VM (lines 11-16).
 The VM, the set of bytecode handlers and bytecode instructions will be randomly switched
@@ -359,10 +363,10 @@ across different code regions in both a single execution and across different pr
 
 Our dynamic scheduling is achieved through two control units: (1) a structure control unit
 to randomly determine whether the execution control should be given to a dispatcher or another bytecode handler,
-(2) a VM switching unit to randomly select a VM to use. Having these two control units to switch 
-the execution path of virtual instruction interpretation can greatly increase the 
+(2) a VM switching unit to randomly select a VM to use. Having these two control units to switch
+the execution path of virtual instruction interpretation can greatly increase the
 diversity of the program behavior when compared to existing approaches  that
-have a single, fixed scheduling structure. 
+have a single, fixed scheduling structure.
 
 \begin{algorithm}[t!]
 \caption{Virtual Interpreter's Work Flow\label{Alg:VMcore-work}}
@@ -371,7 +375,7 @@ have a single, fixed scheduling structure.
 %\ENSURE
 \STATE \texttt{VMInit}
 \STATE Switcher selects a VM randomly
-\STATE Fetch a bytecode from \emph{DriverData1} in current VM
+\STATE Fetch a bytecode from \emph{Standard Bytecode} in current VM
 \WHILE {$ bytecode \neq \emptyset$}
 \STATE Decode the bytecode
 \STATE Select a handler to interpreter the bytecode
@@ -379,9 +383,9 @@ have a single, fixed scheduling structure.
 \IF {i == \texttt{dispatcher}}
 \STATE Select a dispatcher randomly
 \STATE Switching unit selects a VM randomly
-\STATE Fetch the next bytecode from \emph{DriverData1} from the selected VM
+\STATE Fetch the next bytecode from \emph{Standard Bytecode} from the selected VM
 \ELSE [i == \texttt{handler}]
-\STATE Fetch the next bytecode from \emph{DriverData2} in the current VM
+\STATE Fetch the next bytecode from \emph{Offset Bytecode} in the current VM
 \ENDIF
 \ENDWHILE
 \STATE \texttt{VMExit}
@@ -389,14 +393,14 @@ have a single, fixed scheduling structure.
 \end{algorithm}
 
 Our dynamic scheduling scheme is described in Algorithm~\ref{Alg:VMcore-work}. Bytecodes of a code region will
-be executed one after one in sequential order. 
-The virtual interpreter fetchs a bytecode from \emph{DriverData1} and dispatchs a handler to interpret the bytecode (lines 5-6).
+be executed one after one in sequential order.
+The virtual interpreter fetchs a bytecode from \emph{Standard Bytecode} and dispatchs a handler to interpret the bytecode (lines 5-6).
 After executing the bytecode, the control unit will randomly decide whether the control should be given back to a
 bytecode dispatcher or a VM handler (line 7). If the control is given back to a bytecode dispatcher (lines 8-11), a
-dispatcher and a VM will be randomly chosen to execute a bytecode from \emph{DriverData1}. If the control is directed
-to another bytecode handler (lines 12-13),  the program will execute the next bytecode from \emph{DriverData2} .
+dispatcher and a VM will be randomly chosen to execute a bytecode from \emph{Standard Bytecode}. If the control is directed
+to another bytecode handler (lines 12-13),  the program will execute the next bytecode from \emph{Offset Bytecode} .
 The process continues until all the bytecodes of the protected code region
-have been executed. 
+have been executed.
 
 
 \input{example}
@@ -410,7 +414,7 @@ Recall that our design goal is to increase the diversity of program execution,
 so that in different runts the protected region will not follow a single execution path across runs.
 In this analysis, we assume there are 10 different dispatchers. This number matches the current implementation of \DSVMP.
 We use the example presented in Section~\ref{sec:case} as a case study.
-In this example, \emph{DriverDataSet11} and \emph{DriverDataSet21} each has 103 bytes of data.
+In this example, \emph{Standard Bytecode} has 103 bytes of data.
 They contain a total of 78 handler serial numbers. In this analysis, we exclude the last handler because of it is used to exit the VM.
 This leave us 77 handlers where each handler can lead to 11 different execution paths.
 This is because at the end of executing each handler, a control unit will determine whether the control
@@ -505,7 +509,22 @@ In this section, we evaluated \DSVMP using four widely use application
 and compared it against two commercial VM-based protection systems,
 then present the evaluation results of \DSVMP based on the experimental data in detail.
 
-\begin{table*}[!h]
+\subsection{Evaluation Platform and Benchmarks}
+We evaluated \DSVMP on a PC with an 3.0 GHz Intel Core$^{TM}$ i3 Duo processor and 8GB of RAM.
+The PC runs the Windows 10 operating system. We evaluated our approach using four widely use applications: ``\texttt{md5}"~\cite{19md5}, ``\texttt{aescrypt}"~\cite{20Aescrypt}, ``\texttt{bcrypt}"~\cite{21bcrypt} and ``\texttt{gzip}"~\cite{22gzip}.
+We used these applications to process a test text file. The size of the file is 26 KB.
+We also used two small game applications that required user interaction to evaluate the performance of our protection system.
+``\texttt{AStar}"~\cite{}, a maze pathfinding game using the algorithm of astar. ``\texttt{Tetris}"~\cite{}, a classic graphics combination game.
+Figure~\ref{fig:Fig.case} shows the ``\texttt{AStar}" maze barrier setting and route finding results, and the clear row operations of ``\texttt{Tetris}".
+In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.
+Table~\ref{tab:Tab.3} gives some information of the protected code regions for each benchmark.
+The total number of target program instructions are shown in the 3rd column of the table.
+The 4rd column of the table gives the function to be projected
+and the 5th column shows the number of instructions of the function.
+Finally, we use the Intel Pin tools~\cite{pin} to calculate the number of instructions got executed with the critical functions
+while processing the test file, and shown in the last column of the table.
+
+\begin{table*}[!t]
 \scriptsize
 \begin{center}
 \caption{Information of the bechmarks\label{tab:Tab.3}}
@@ -516,43 +535,34 @@ then present the evaluation results of \DSVMP based on the experimental data in 
    & aescrypt & 142 & 9788 &\texttt{encrypt-stream()} & 1045 & 478297 & \\
    & bcrypt & 68 & 3081 & \texttt{Blowfish-Encryp()} & 54 & 1050003 & \\
    & gzip & 56 & 9837 & \texttt{deflate()} & 154 & 680037 & \\
+   & astar & 281 & 29036 & \texttt{SearchPath()} & 156 & 19589 & \\
+   & tetris & 37 & 4386 & \texttt{ClearRow()} & 73 & 10942\footnotemark & \\
   \hline
 \end{tabular}}{}
 \end{center}
 Notes: The 3rd column shown the total number of target program instructions. The 4rd column of the table gives the function to be projected and the 5th column shows the number of instructions of the function. The number of instructions got executed with the critical functions while processing the test file, and shown in the last column of the table.
 \end{table*}
+\footnotetext{When ``\texttt{Tetris}" is doing the clear row operations, the patterns of the whole structure is uncertain, so the number of instructions produced by this action is also uncertain, here we use the average of multiple data.}
 
-\subsection{Evaluation Platform and Benchmarks}
-We evaluated \DSVMP on a PC with an 3.0 GHz Intel Core$^{TM}$ 3 Duo processor and 4GB of RAM.
-The PC runs the Windows 7 operating system. We evaluated our approach using four widely use applications: ``\texttt{md5}"~\cite{19md5}, ``\texttt{aescrypt}"~\cite{20Aescrypt}, ``\texttt{bcrypt}"~\cite{21bcrypt} and ``\texttt{gzip}"~\cite{22gzip}.
-We used these applications to process a test text file. The size of the file is 26 KB.
-Table~\ref{tab:Tab.3} gives some information of the protected code regions for each benchmark.
-The total number of target program instructions are shown in the 3rd column of the table.
-The 4rd column of the table gives the function to be projected
-and the 5th column shows the number of instructions of the function.
-Finally, we use the Intel Pin tools~\cite{pin} to calculate the number of instructions got executed with the critical functions
-while processing the test file, and shown in the last column of the table.
-
-
-\subsection{Code Size and Runtime Overhead}\label{sec:benchmarktest}
-\paragraph*{Code size} For each target benchmark, we applied \DSVMP to the target function and repeated the process for 8 times.
-For each protection run, we used a different number of VM configuration.
 
 \begin{figure}[t]
 \centering
 \begin{minipage}[t]{0.49\linewidth}
 \centering
-\includegraphics[width=.9\textwidth]{figure/codesize.pdf}
-\caption{The impact of code sizes for \DSVMP configurations with a different number of VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.size}
+\includegraphics[width=.9\textwidth]{figure/case2.pdf}
+\caption{The interaction interface of the ``\texttt{AStar}" and ``\texttt{Tetris}". In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.}\label{fig:Fig.case}
 \end{minipage}
 \hspace{0.005\textwidth}
 \begin{minipage}[t]{0.49\linewidth}
 \centering
-\includegraphics[width=.9\textwidth]{figure/runtime.pdf}
-\caption{The average runtime of target benchmark when protected with different VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.time}
+\includegraphics[width=.9\textwidth]{figure/codesize.pdf}
+\caption{The impact of code sizes for \DSVMP configurations with a different number of VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program.}\label{fig:Fig.size}
 \end{minipage}
 \end{figure}
 
+\subsection{Code Size and Runtime Overhead}\label{sec:benchmarktest}
+\paragraph*{Code size} For each target benchmark, we applied \DSVMP to the target function and repeated the process for 10 times.
+For each protection run, we used a different number of VM configuration.
 
 Figure~\ref{fig:Fig.size} shows how the \DSVMP multi-VM scheme affects the code size,
 and the number ``0" represents the original target program.
@@ -567,9 +577,19 @@ the largest number of protected instructions (see Table~\ref{tab:Tab.3}).
 For the same reason, the code size of ``\texttt{bcrypt}" grows slower than other programs,
 as this benchmark has the least number of protected instructions.
 
+\begin{figure}[t]
+\centering
+\subfigure[]{
+\includegraphics[width=0.485\textwidth]{figure/runtime1.pdf}}
+\subfigure[]{
+\includegraphics[width=0.485\textwidth]{figure/runtime2.pdf}}
+\caption{The average runtime of target benchmark when protected with different VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program. Because the runtime overhead of ``\texttt{AStar}" and ``\texttt{Tetris}" is much smaller than the other four benchmarks, in particular, their experimental data are shown separately in (b) in order to observe their variation.}\label{fig:Fig.time}
+\end{figure}
 
 \paragraph*{Runtime overhead} To evaluate the runtime overhead of \DSVMP, we used benchmark to process the test file.
 For each protected benchmark we repeated the process for 10 times and report the average runtime per benchmark.
+For ``\texttt{AStar}" and ``\texttt{Tetris}", in order to eliminate the time impact of the interaction,
+we only calculate and collect the overage run time of the target operation (pathfinding and row clear).
 
 The results are depicted in Figure~\ref{fig:Fig.time},
 which shows that the majority of average runtime will tend to a stable range with the increase of the number of VMs.
@@ -598,10 +618,10 @@ We find the temporal and spatial overhead of the target program is mainly affect
 the size of the key code and the number of instructions at execution time.
 So we have reason to believe, if we only focus on protecting a few critical code regions,
 \DSVMP will not cause too much impact on the temporal and spatial overhead of the target program.
+Such as ``\texttt{AStar}" and ``\texttt{Tetris}", a few milliseconds of time overhead for the user is almost impossible to feel.
 
 
 \subsection{Structural diversity}\label{sec:s-d}
-
 \paragraph*{Multi-VM switching test}
 In order to verify the impact of multi-VM switching on program execution, we did a runtime tracking experiment.
 We only protected one instruction ``\texttt{mov eax, 1234567}" for ``\texttt{test.exe}"\footnote{A small test procedures, size of 3 KB, and its function is to pop up a confirmation box.}.
@@ -664,24 +684,6 @@ According to the experimental results, we can see, the execution path of a prote
 Combined with various handler sets, the target program protected by \DSVMP has temporal diversity~\cite{4collberg}.
 Therefore, our approach can effectively resist the cumulative attacks.
 
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=0.8\textwidth]{figure/exec2vm.pdf}
-%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec2vm}
-%\end{figure}
-
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=.8\textwidth]{figure/exec3vm.pdf}
-%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec3vm}
-%\end{figure}
-
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=.8\textwidth]{figure/exec4vm.pdf}
-%\caption{Dynamic VM switching during the protected program execution.}\label{fig:Fig.exec4vm}
-%\end{figure}
-
 
 
 \subsection{Comparisons with state-of-the-arts}\label{sec:comparetest}
@@ -693,19 +695,17 @@ In addition, we also adopt the VMP with two kinds of schemes to protect the targ
 \emph{Maximum-protection} and \emph{Maximum-speed}.
 For \DSVMP, We used a configuration of 5 VMs, \DSVMP-5VM, in this experiment.
 
-\begin{figure}[t]
-\centering
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\includegraphics[width=.9\textwidth]{figure/comsize.pdf}
-\caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
-\end{minipage}
-\hspace{0.005\textwidth}
-\begin{minipage}[t]{0.49\linewidth}
-\centering
-\includegraphics[width=.9\textwidth]{figure/comtime.pdf}
-\caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
-\end{minipage}
+
+\begin{figure}[t]%
+    \centering
+    \includegraphics[width=0.9\columnwidth]{figure/comsize.pdf}
+    \caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
+\end{figure}
+
+\begin{figure}[t]%
+    \centering
+    \includegraphics[width=0.9\columnwidth]{figure/comtime.pdf}
+    \caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
 \end{figure}
 
 
