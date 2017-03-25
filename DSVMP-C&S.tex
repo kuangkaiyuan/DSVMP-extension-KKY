@@ -477,9 +477,9 @@ and $\sum\limits_{i = 0}^{i < n}{DF(i)}$ are equal to the \texttt{NodeNum}.}
 \end{table*}
 
 \subsubsection{Example}
-Table~\ref{tab:Tab.2} gives two code regions for protection. These  two code snippets have very similar structures because they have just one basic block and no branches. 
+Table~\ref{tab:Tab.2} gives two code regions for protection. These  two code snippets have very similar structures because they have just one basic block and no branches.
 As can be seen from the table, the code transformation of \DSVMP leads to significantly different metric values. This indicates the transformed code segments have distinct structures.
-The metric value calculation is described as follows. 
+The metric value calculation is described as follows.
 
 We use the following formula to quantify the code structure information, $X$, after code obfuscation.
 \[\begin{array}{l}
@@ -514,10 +514,10 @@ and compare it against two commercial VM-based protection systems.
 
 \subsection{Evaluation Platform and Benchmarks}
 We evaluated \DSVMP on a PC with an 3.0 GHz Intel Core$^{TM}$ i3 Duo processor and 8GB of RAM.
-The PC runs the Windows 10 operating system. We evaluated our approach using four widely use applications, \texttt{md5}, \texttt{aescrypt}, \texttt{bcrypt}, \texttt{gzip}. 
+The PC runs the Windows 10 operating system. We evaluated our approach using four widely use applications, \texttt{md5}, \texttt{aescrypt}, \texttt{bcrypt}, \texttt{gzip}.
 We used these applications to process a test text file. The size of the file is 26 KB.
 In addition to the four applications, we also evaluate our approach on two interactive gaming applications.
-``\texttt{AStar}"~\cite{}, a maze pathfinding game using the A* algorithm. ``\texttt{Tetris}"~\FIXME{\cite{}} is a classic graphics combination game.
+``\texttt{AStar}", a maze pathfinding game using the A* algorithm. ``\texttt{Tetris}" is a classic graphics combination game~\cite{benchmark}.
 Figure~\ref{fig:Fig.case} shows the ``\texttt{AStar}" maze barrier setting and route finding results, and the clear row operations of ``\texttt{Tetris}".
 In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.
 Table~\ref{tab:Tab.3} gives some information of the protected code regions for each benchmark.
@@ -530,7 +530,7 @@ while processing the test file, which is shown in the last column of the table.
 \begin{table*}[!t]
 \scriptsize
 \begin{center}
-\caption{Information of the bechmarks\label{tab:Tab.3}}
+\caption{Information of the benchmarks\label{tab:Tab.3}}
 {\tabcolsep8pt\begin{tabular}{@{}rlrclrrl@{}}
 \toprule
    & \textbf{program} & \textbf{Size(KB)} & \textbf{Instr. Total} & \textbf{Function to protect} & \textbf{Instr. Protect} & \textbf{Instr. Executed} & \\
@@ -540,7 +540,7 @@ while processing the test file, which is shown in the last column of the table.
    & bcrypt & 68 & 3081 & \texttt{Blowfish-Encryp()} & 54 & 1050003 & \\
    & gzip & 56 & 9837 & \texttt{deflate()} & 154 & 680037 & \\
    & astar & 281 & 29036 & \texttt{SearchPath()} & 156 & 19589 & \\
-   & tetris & 37 & 4386 & \texttt{ClearRow()} & 73 & 10942\footnotemark & \\
+   & tetris & 37 & 4386 & \texttt{ClearRow()} & 73 & 10942\\%\footnotemark & \\
 \bottomrule
 \end{tabular}}{}
 \end{center}
@@ -565,8 +565,12 @@ Notes: The 3rd column shown the total number of target program instructions. The
 \end{figure}
 
 \subsection{Code Size and Runtime Overhead}\label{sec:benchmarktest}
-\subsubsection{Code size} 
-For each target benchmark, we applied \DSVMP to the target function \FIXME{how did you select the target function?} and repeated the process for 10 times.
+\subsubsection{Code size}
+For each target benchmark, we will choose a core function to protect. 
+Only need to do a simple processing for the source code of target benchmark, 
+insert a set of specific SDK (``STARTSDK" and ``ENDSDK") at the beginning and end of the key function. 
+After the compiler, \DSVMP can accurately locate the key code segment in the executable file.  
+we applied \DSVMP to the target function and repeated the process for 10 times.
 For each protection run, we used a different number of VM configuration.
 
 Figure~\ref{fig:Fig.size} shows how the \DSVMP multi-VM scheme affects the code size.
@@ -579,8 +583,8 @@ This is why the code size of ``\texttt{aescrypt}" grows fastest than others -- a
 the largest number of protected instructions (see Table~\ref{tab:Tab.3}).
 For the same reason, the code size of ``\texttt{bcrypt}" grows slower than other programs,
 as this benchmark has the least number of protected instructions.
-However, overall the code size growth (a few hundreds KB in our experiments) is modest as typically we only need 
-to protect the core function or algorithm of the application. 
+However, overall the code size growth (a few hundreds KB in our experiments) is modest as typically we only need
+to protect the core function or algorithm of the application.
 
 \begin{figure}[t]
 \centering
@@ -591,27 +595,28 @@ to protect the core function or algorithm of the application.
 \caption{The average runtime of target benchmark when protected with different VMs. The number of horizontal axis is the configuration of the VMs, ``0" is the original program. Because the runtime overhead of ``\texttt{AStar}" and ``\texttt{Tetris}" is much smaller than the other four benchmarks, in particular, their experimental data are shown separately in (b) in order to observe their variation.}\label{fig:Fig.time}
 \end{figure}
 
-\subsubsection{Runtime overhead} 
+\subsubsection{Runtime overhead}
 
 To evaluate the runtime overhead of \DSVMP, we used benchmark to process the test file.
 For each protected benchmark we repeated the process for 10 times and report the average runtime per benchmark.
 For ``\texttt{AStar}" and ``\texttt{Tetris}", in order to eliminate the user interaction delay,
 we only calculate and collect the average runtime of the target operations (pathfinding and row clear).
 
-The results are depicted in Figure~\ref{fig:Fig.time}. We see an increase on the runtime overhead when 
-using multiple VMs but the overhead becomes stable from 3 VMs onward. 
-which shows that the majority of average runtime .
+The results are depicted in Figure~\ref{fig:Fig.time}. We see an increase on the runtime overhead when
+using multiple VMs but the overhead becomes stable from 3 VMs onward.
+which shows that the majority of average runtime.
 %This phenomenon is inevitable, the increase in the number of VMs leads to a
 %greater likelihood and diversity of handler's choice, when interpret the virtual instructions.
 %It does not add a lot of extra operations to the core function implementation.
-The main runtime overhead comes from the the switch time between different VMs
-and the execution difference \FIXME{what do you mean by execution difference?} of obfuscated handler.
-The overhead of VM switch is stable so that it does not significantly increase when 
+Except for the handler's normal interpretation of the time spent on the execution,
+the main runtime overhead comes from the the switch time between different VMs.
+%and the execution difference \FIXME{what do you mean by execution difference?} of obfuscated handler.
+The overhead of VM switch is stable so that it does not significantly increase when
 using 3 or more VMs. We notice that the overhead of VM switch for using two VMs
 is not significant. This is because our scheme does not frequently switch
-the VM under a 2-VM configuration. 
+the VM under a 2-VM configuration.
 Besides, we found that the greater the number of protected instructions get executed at runtime
-the greater the runtime overhead will be. 
+the greater the runtime overhead will be.
 This explains why ``\texttt{bcrypt}" has a much higher runtime overhead than other benchmarks.
 
 %There is also an unique observation that compared to other protection strategies,
@@ -632,8 +637,8 @@ This explains why ``\texttt{bcrypt}" has a much higher runtime overhead than oth
 
 \subsection{Structural diversity}\label{sec:s-d}
 \subsubsection{Multi-VM switching experiment}
-In order to evaluate the impact of multi-VM switching on program execution, we conduct experiments on 
-a small micro-benchmark, ``\texttt{test.exe}\footnote{A 3KB application that pops up a confirmation box.}. Here we only protect one instruction ``\texttt{mov eax, 1234567}" of the application. 
+In order to evaluate the impact of multi-VM switching on program execution, we conduct experiments on
+a small micro-benchmark, ``\texttt{test.exe}\footnote{A 3KB application that pops up a confirmation box.}. Here we only protect one instruction ``\texttt{mov eax, 1234567}" of the application.
 So as to reduce the complexity of the protected program as much as possible to facilitate the tracking procedures.
 We use three VM configurations, 2-VM, 3-VM and 4-VM to protect the target program.
 For each configuration, we run the program execution 5 times to collect the relevant information.
@@ -655,16 +660,24 @@ For each configuration, we run the program execution 5 times to collect the rele
 \end{figure}
 
 
-Figure~\ref{fig:Fig.testinfor} shows the VM switching frequency information of ``\texttt{test.exe}" for the five runs. 
+
+Figure~\ref{fig:Fig.testinfor} shows the VM switching frequency information of ``\texttt{test.exe}" for the five runs.
 %A total of 69 handler scheduling  the test key instruction functions.
 We observe that the frequency of VM switching is low when 2 VMs are use.
-However, the frequency increases by 75\% when 3 or 4 VMs are used. 
+However, the frequency increases by 75\% when 3 or 4 VMs are used.
 In this experiment, we did not perform handler obfuscation and used only one dispatcher in the protection process.
 This can minimize the impact of irrelevant factors os that only the multi-VM switcher can affect the number of instruction executed.
 Through the experiment we found that the impact of 2-VM on the number of instructions gets executed at runtime is less than 3-VM and 4-VM,
 This is depicted in Figure~\ref{fig:Fig.testinstr}.
-Essentially, the number of instructions gets executed can reflect the runtime overhead, 
+Essentially, the number of instructions gets executed can reflect the runtime overhead,
 This explains why the 2-VM configuration has a smaller effect on runtime overhead in Figure~\ref{fig:Fig.time}.
+
+
+
+\subsubsection{Perform path runtime diversity}
+In the course of the above experiment, we also collected the ID of the VM where the handler was executed each time.
+Figure~\ref{fig:Fig.execvm} shows the switching of the VM for three runs.
+The data in (a) and (b) are from the test program with 3-VM and 4-VM configurations, respectively.
 
 \begin{figure}[t]
 \centering
@@ -672,74 +685,92 @@ This explains why the 2-VM configuration has a smaller effect on runtime overhea
 \includegraphics[width=0.485\textwidth]{figure/exec3vm.pdf}}
 \subfigure[]{
 \includegraphics[width=0.485\textwidth]{figure/exec4vm.pdf}}
-\caption{Dynamic VM switching for executing protected code regions. 
-The handler's scheduling order is plotted on the abscissa \FIXME{What?? what is abscissa???}, starting at the origin and moving to the right. There are a total of 69 schedules. 
-The y-axis shows the VM selected in each schedule. Different lines show the VM switches across runs for a 3-VM (a) and a 4-VM configuration. }
-\FIXME{Don't just use color to identify lines. The reviewer might print the paper in black and white.}
-\label{fig:Fig.execvm}
+\caption{Dynamic VM switching for executing protected code regions. There are a total of 69 handler schedules.
+The y-axis shows the VM selected in each schedule. Different lines show the VM switches across runs for a 3-VM (a) and a 4-VM configuration.}\label{fig:Fig.execvm}
 \end{figure}
 
-\subsubsection{Perform path runtime diversity}
-In the course of the above experiment, we also collected the ID of the VM where the handler was executed each time.
-Figure~\ref{fig:Fig.execvm} shows the switching of the VM for five runs.
-The data in (a) and (b) are from the test program with 3-VM and 4-VM configurations, respectively.
-
 As can be clearly seen in the figure, VMs are randomly selected across different runs,
-and the execution path of the 5 runs is not the identical. As explained in Section~\ref{sec:mvm}, 
-the set of handlers in each VM is obfuscated with different obfuscation methods and is combined in an out-of-order manner.
-Therefore, the structure of the called Handler is different for the same phase of the different runs. \FIXME{What???}
-Take the 4-VM configuration as an example, there are a total of 69 handler schedules, 
-regardless of the middle of the dispatcher changes in the process,
-only the Handler scheduling execution there is $4^{69}$ different execution path.
-This value is very large, and it will be great resistance to the adversary who use cumulative attacks.
-\FIXME{Have no idea of what is talking about here. Please make triple check the writing.}
-
-
-The experimental results show that  the execution path of a protected program exhibit strong diversity. 
-Combined with various handler sets, the target program protected by \DSVMP thus has temporal diversity~\cite{4collberg}.
+and the execution path of the 3 runs is not the identical.
+For each dispatch loop, the dispatcher will randomly selects a VM to enter and schedules the corresponding handler.
+As mentioned before, the handlers set in each VM is obfuscated with different obfuscation schemes
+and further performs out-of-order operations.
+Thus, the internal structure of the handler dispatched from different VMs at each run times is different.
+%As explained in Section~\ref{sec:mvm}, the set of handlers in each VM is obfuscated with different obfuscation methods and is combined in an out-of-order manner. Therefore, the structure of the called Handler is different for the same phase of the different runs. \FIXME{What???} Take the 4-VM configuration as an example, there are a total of 69 handler schedules, regardless of the middle of the dispatcher changes in the process, only the Handler scheduling execution there is $4^{69}$ different execution path. This value is very large, and it will be great resistance to the adversary who use cumulative attacks. \FIXME{Have no idea of what is talking about here. Please make triple check the writing.}
+The experimental results show that the execution path of a protected program exhibit strong diversity.
+Combined with various handler sets, the target program protected by \DSVMP will have temporal diversity~\cite{4collberg}.
 Therefore, our approach can effectively resist the cumulative attacks.
-
 
 
 \subsection{Comparisons with state-of-the-arts}\label{sec:comparetest}
 We also compared \DSVMP against two commercial VM protection systems,
 Code Virtualizer (CV)~\cite{2CV} and VMProtect (VMP)~\cite{3Vmprotect}, in terms of code sizes and runtime overhead.
-We adopt a customize protection scheme \FIXME{what's the scheme?} when using the CV to protect the target program,
-because such a CV has a moderate temporal and spatial overhead.
+We adopt a customize protection scheme when using the CV to protect the target program,
+which has \emph{Medium} opcodes obfuscation and VM complexity,
+and remove the ``Strip Relocation", ``Re-Virtualization" and other additional technology.
+So, such a CV has a moderate temporal and spatial overhead.
 In addition, we also adopt the VMP with two kinds of schemes to protect the target program,
-\emph{Maximum-protection} and \emph{Maximum-speed}.
+\emph{Maximum-protection} and \emph{Maximum-speed},
+they are respectively the protection effect of the strongest and performance impact of the smallest protection schemes.
 For \DSVMP, We used a configuration of 5 VMs, \DSVMP-5VM, in this experiment.
-\FIXME{Need to explain why choose these schemes.}
-
+Because the time spent in this configuration has stabilized, and spatial overhead of 5-VM configuration is moderate.
 
 \begin{figure}[t]%
     \centering
-    \includegraphics[width=0.9\columnwidth]{figure/comsize.pdf}
+    \includegraphics[width=0.8\columnwidth]{figure/comsize.pdf}
     \caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
 \end{figure}
 
+\subsubsection{Code size}
+Figure \ref{fig:Fig.com-size} shows the impact on code size of several VM-based protection systems.
+From the figure we can see that the effects of \DSVMP and commercial VM-based protection systems on code size are similar.
+Such as, for the least affected program \texttt{bcrypt}, the \DSVMP-5VM's spatial overhead is 135\%.
+The largest overhead is 139\% from the CV, and the average spatial overhead is 134.9\%.
+And for the most affected program \texttt{aescrypt}, the spatial overhead of \DSVMP-5VM is 177\%,
+and the largest overhead is 252\% which is caused by VMProtect, and the average spatial overhead is 182.5\%.
+The growth of the code size is mainly affected by the size of the protected instructions.
+The larger the target code to be protected, the large the code size will be.
+Among them, the \texttt{aescrypt} has a greater code bloat after protected by VMProtect Maximum-protection,
+it may be caused by the complexity of the function \texttt{encrypt-stream()} and the Maximum-protection strategy.
+Overall, our approach does not significantly increase the code size when compared to the commercial products.
+
 \begin{figure}[t]%
     \centering
-    \includegraphics[width=0.9\columnwidth]{figure/comtime.pdf}
+    \includegraphics[width=0.8\columnwidth]{figure/comtime.pdf}
     \caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
 \end{figure}
 
+\begin{table*}[!t]
+\scriptsize
+\begin{center}
+\caption{The average runtime overhead\label{tab:Tab.4}}
+{\tabcolsep8pt\begin{tabular}{@{}rlrrrrrl@{}}
+\toprule
+   \multicolumn{2}{c}{} & \multicolumn{6}{c}{\textbf{Average runtime(ms)}} \\
+   & \textbf{program} & \textbf{Original} & \tabincell{c}{\textbf{DSVMP}\\\textbf{5VM}} & \tabincell{c}{\textbf{VMP}\\\textbf{Max-Speed}} & \tabincell{c}{\textbf{VMP}\\\textbf{Max-Protect}} & \tabincell{c}{\textbf{Code}\\\textbf{Virtualizer}} & \\
+\midrule
+   & md5      & 1.603 & 64.229  & 73.660  & 141.179  & 803.302  & \\
+   & aescrypt & 6.550 & 154.720 & 257.718 & 1903.458 & 623.452  & \\
+   & bcrypt   & 4.544 & 298.415 & 252.655 & 1899.968 & 2051.708 & \\
+   & gzip     & 3.963 & 169.107 & 368.599 & 1923.022 & 1110.598 & \\
+   & astar    & 8.806 & 16.992  & 18.210  & 91.691   & 58.705   & \\
+   & tetris   & 0.668 & 1.565   & 4.811   & 13.393   & 12.012   & \\
+\midrule
+   & Average  & 4.357 & 117.505 & 162.609 & 995.452  & 776.630  & \\
+\bottomrule
+\end{tabular}}{\\Notes: The average data for the last row is the average runtime for 6 benchmarks for each protection scheme.}
+\end{center}
+\vspace{-5mm}
+\end{table*}
 
-\subsubsection{Code size} Figure \ref{fig:Fig.com-size} shows the impact on code size of several VM-based protection systems.
-From the figure we can see that the effects of \DSVMP and commercial VM-based protection systems on code size are similar \FIXME{Will need some quantified numbers here!}.
-Overall, the growth of the code size is mainly affected by the size of the protected instructions.
-The larger the target code to be protected, the large the code size will be. 
-Among them, the \texttt{aescrypt} has a greater code bloat after protected by VMProtect Maximum-protection,
-it may be caused by the complexity of the function \texttt{encrypt-stream()} and the Maximum-protection strategy.
-Overall, our approach does not significantly increase the code size when compared to the commercial products. 
-
-
-\subsubsection{Runtime overhead} The average runtime overhead of the three schemes is given in Figure \ref{fig:Fig.com-time} 
-which shows that the runtime overhead of \DSVMP and VMProtect Maximum-speed
+\subsubsection{Runtime overhead} The average runtime overhead of the three schemes is given in Figure \ref{fig:Fig.com-time} which shows that the runtime overhead of \DSVMP and VMProtect Maximum-speed
 are comparable and smaller than Code Virtualizer and VMProtect Maimum-protection.
 Code protected under CV and VMProtect Maimum-protection has the most expensive runtime overhead,
-which on average is higher than \DSVMP and VMProtect Maimum-speed. \FIXME{quantified numbers?}
+which on average is higher than \DSVMP and VMProtect Maimum-speed.
+Detailed experimental data are shown in Table~\ref{tab:Tab.4}.
+We can see from the average runtime data for 6 benchmarks on the last line,
+the runtime overhead brings by CV and VMP-Max-Protection are 7 and 9 times bigger than DSVMP-5VM respectively.
 
+%  A & \tabincell{l}{\texttt{mov eax,ebx}\\ \texttt{sub eax,03}} & A' & 23 & 5 & 46 & 18\\
 %\paragraph*{Discussion} Through the above analysis and comparison, we argue that the temporal and spatial overhead of our \DSVMP are acceptable.
 
 
