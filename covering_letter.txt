@@ -1,4 +1,4 @@
-Dear Sir or Madam
+Dear Professor Spafford,
 
 Please find attached our paper entitled "Enhance Virtual-Machine-Based Code Obfuscation Security through Dynamic Bytecode Scheduling" which we wish to submit for publication in Computers & Security.
 
