@@ -135,8 +135,17 @@
 \title{
 Enhance Virtual-Machine-Based Code Obfuscation Security through Dynamic Bytecode Scheduling
 \footnote{
-Extension of Conference Paper: a preliminary version of this article entitled ``Exploiting Dynamic Scheduling for VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and
-Privacy in Computing and Communications(TrustCom), 2016~\cite{kuang2016exploiting}. The extended version makes the following additional contributions over the conference paper: (1) it provides a more detailed description of the background and threat model (Section~\ref{sec:bak} and~\ref{sec:attack}); (2) it describes how the virtual interpreter dynamically changes the execution path at runtime using an algorithmic model (Section~\ref{sec:mvm-2} and Algorithm~\ref{Alg:VMcore-work}); (3) it provides new experimental results to evaluate the overhead of the proposed technique, providing new insights of the approach (Section~\ref{sec:benchmarktest}); (4) it adds a new experiment to evaluate the diversity of the protected structure at runtime (Section~\ref{sec:s-d}); (5) it includes new results to compare the proposed approach against two commercial VM protection systems, Code Virtualizer and VMProtect (Section~\ref{sec:comparetest}).
+Extension of Conference Paper: a preliminary version of this article entitled ``Exploiting Dynamic Scheduling for
+VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and
+Privacy in Computing and Communications(TrustCom), 2016~\cite{kuang2016exploiting}. The extended version makes the
+following additional contributions over the conference paper: (1) it provides a more detailed description of the
+background and threat model (Sections~\ref{sec:bak} and~\ref{sec:attack}); (2) it describes how the virtual interpreter
+dynamically changes the execution path at runtime using an algorithmic model (Section~\ref{sec:mvm-2} and
+Algorithm~\ref{Alg:VMcore-work}); (3) it provides new experimental results to evaluate the overhead of the proposed
+technique, providing new insights of the approach (Section~\ref{sec:benchmarktest}); (4) it adds a new experiment to
+evaluate the diversity of the protected structure at runtime (Section~\ref{sec:s-d}); (5) it includes new results to
+compare the proposed approach against two
+commercial VM protection systems, Code Virtualizer and VMProtect (Section~\ref{sec:comparetest}).
 }
 }
 %\tnotetext[label0]{This is only an example}
@@ -519,13 +528,16 @@ We used these applications to process a test text file. The size of the file is 
 In addition to the four applications, we also evaluate our approach on two interactive gaming applications.
 ``\texttt{AStar}", a maze pathfinding game using the A* algorithm. ``\texttt{Tetris}" is a classic graphics combination game~\cite{benchmark}.
 Figure~\ref{fig:Fig.case} shows the ``\texttt{AStar}" maze barrier setting and route finding results, and the clear row operations of ``\texttt{Tetris}".
-In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.
 Table~\ref{tab:Tab.3} gives some information of the protected code regions for each benchmark.
 The total number of target program instructions are shown in the 3rd column in Table~\ref{tab:Tab.3}.
 The 4th column of the table gives the function to be projected
 and the 5th column shows the number of instructions of the function.
 Finally, we use the Intel Pin tools~\cite{pin} to calculate the number of instructions got executed with the critical functions
 while processing the test file, which is shown in the last column of the table.
+
+
+%In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.
+
 
 \begin{table*}[!t]
 \scriptsize
@@ -554,7 +566,7 @@ Notes: The 3rd column shown the total number of target program instructions. The
 \begin{minipage}[t]{0.49\linewidth}
 \centering
 \includegraphics[width=.9\textwidth]{figure/case2.pdf}
-\caption{The interaction interface of the ``\texttt{AStar}" and ``\texttt{Tetris}". In order to be able to facilitate multiple experiments to collect data under the same conditions, we set the barrier of ``\texttt{AStar}" as a rule and easy to construct the shape.}\label{fig:Fig.case}
+\caption{The interaction interface of the ``\texttt{AStar}" and ``\texttt{Tetris}". }\label{fig:Fig.case}
 \end{minipage}
 \hspace{0.005\textwidth}
 \begin{minipage}[t]{0.49\linewidth}
@@ -566,10 +578,10 @@ Notes: The 3rd column shown the total number of target program instructions. The
 
 \subsection{Code Size and Runtime Overhead}\label{sec:benchmarktest}
 \subsubsection{Code size}
-For each target benchmark, we will choose a core function to protect. 
-Only need to do a simple processing for the source code of target benchmark, 
-insert a set of specific SDK (``STARTSDK" and ``ENDSDK") at the beginning and end of the key function. 
-After the compiler, \DSVMP can accurately locate the key code segment in the executable file.  
+For each target benchmark, we will choose a core function to protect.
+Only need to do a simple processing for the source code of target benchmark,
+insert a set of specific SDK (``STARTSDK" and ``ENDSDK") at the beginning and end of the key function.
+After the compiler, \DSVMP can accurately locate the key code segment in the executable file.
 we applied \DSVMP to the target function and repeated the process for 10 times.
 For each protection run, we used a different number of VM configuration.
 
@@ -646,17 +658,15 @@ For each configuration, we run the program execution 5 times to collect the rele
 
 \begin{figure}[t]
 \centering
-\begin{minipage}[t]{0.49\linewidth}
 \centering
-\includegraphics[width=.9\textwidth]{figure/testinfor.pdf}
-\caption{The probability distribution of multiple VMs switching for multiple runs. ``Switch" is the number of times the VM switch, and ``No Switch" is the opposite.}\label{fig:Fig.testinfor}
-\end{minipage}
-\hspace{0.005\textwidth}
-\begin{minipage}[t]{0.49\linewidth}
+\includegraphics[width=.65\textwidth]{figure/testinfor.pdf}
+\caption{The probability distribution of multiple VMs switching for multiple runs. The legend ``\texttt{switch}" donates the number of times a VM has been switched to another, and the legend ``no switch" means the VM remains unchanged.}\label{fig:Fig.testinfor}
+\end{figure}
+
+\begin{figure}[t]
 \centering
-\includegraphics[width=.9\textwidth]{figure/testinstr.pdf}
+\includegraphics[width=.65\textwidth]{figure/testinstr.pdf}
 \caption{The number of instructions changes across runs due to the VM switch.} \label{fig:Fig.testinstr}
-\end{minipage}
 \end{figure}
 
 
@@ -686,7 +696,7 @@ The data in (a) and (b) are from the test program with 3-VM and 4-VM configurati
 \subfigure[]{
 \includegraphics[width=0.485\textwidth]{figure/exec4vm.pdf}}
 \caption{Dynamic VM switching for executing protected code regions. There are a total of 69 handler schedules.
-The y-axis shows the VM selected in each schedule. Different lines show the VM switches across runs for a 3-VM (a) and a 4-VM configuration.}\label{fig:Fig.execvm}
+The y-axis shows the VM selected in each schedule. Different lines show the VM switches across runs for a 3-VM (a) and a 4-VM  (b) configuration.}\label{fig:Fig.execvm}
 \end{figure}
 
 As can be clearly seen in the figure, VMs are randomly selected across different runs,
@@ -717,7 +727,7 @@ Because the time spent in this configuration has stabilized, and spatial overhea
 \begin{figure}[t]%
     \centering
     \includegraphics[width=0.8\columnwidth]{figure/comsize.pdf}
-    \caption{The comparison of impact on file size with VMProtect and Code Virtualizer.}\label{fig:Fig.com-size}
+    \caption{Code size comparisions.}\label{fig:Fig.com-size}
 \end{figure}
 
 \subsubsection{Code size}
@@ -736,7 +746,7 @@ Overall, our approach does not significantly increase the code size when compare
 \begin{figure}[t]%
     \centering
     \includegraphics[width=0.8\columnwidth]{figure/comtime.pdf}
-    \caption{The comparison of average runtime overhead with VMProtect and Code Virtualizer.}\label{fig:Fig.com-time}
+    \caption{Average runtime overhead comparisions.}\label{fig:Fig.com-time}
 \end{figure}
 
 \begin{table*}[!t]
@@ -821,7 +831,7 @@ segments protected by \DSVMP rarely follow the same execution path across
 different runs. The dynamic program execution brought by \DSVMP forces the attacker
 to have to use many trail runs to uncover the implementation of the protected code
 region. As such, \DSVMP significantly increases the overhead and effort
-involved in code reverse engineering. We have evaluated \DSVMP using four
+involved in code reverse engineering. We have evaluated \DSVMP using six
 real world applications and compared it to two state-of-the-art VM-based code
 protection schemes. Our experimental results show that \DSVMP provide
 stronger protection with comparable overhead of runtime and code size.

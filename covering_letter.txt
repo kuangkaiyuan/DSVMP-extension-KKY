@@ -1,0 +1,22 @@
+Dear Sir or Madam
+
+Please find attached our paper entitled "Enhance Virtual-Machine-Based Code Obfuscation Security through Dynamic Bytecode Scheduling" which we wish to submit for publication in Computers & Security.
+
+A preliminary version of this article entitled "Exploiting Dynamic Scheduling for VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and Privacy in Computing and Communications(TrustCom), 2016. 
+
+The extended version makes the several additional contributions over the conference paper:
+
+1. It provides a more detailed description of the background and threat model (Sections 2 and 3); 
+
+2. It describes how the virtual interpreter dynamically changes the execution path at runtime using an algorithmic model (Section 6.2 and Algorithm 1);
+
+3. It provides new experimental results to evaluate the overhead of the proposed technique, providing new insights of the approach (Section 9.2); 
+
+4. It adds a new experiment to evaluate the diversity of the protected structure at runtime (Section 9.3); 
+
+5. It includes new results to compare the proposed approach against two commercial VM protection systems, Code Virtualizer and VMProtect (Section 9.4).
+
+
+Yours faithfully
+
+Kuangkai Yuan
