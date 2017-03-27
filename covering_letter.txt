@@ -2,7 +2,7 @@ Dear Sir or Madam
 
 Please find attached our paper entitled "Enhance Virtual-Machine-Based Code Obfuscation Security through Dynamic Bytecode Scheduling" which we wish to submit for publication in Computers & Security.
 
-A preliminary version of this article entitled "Exploiting Dynamic Scheduling for VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and Privacy in Computing and Communications(TrustCom), 2016. 
+A preliminary version of this article entitled "Exploiting Dynamic Scheduling for VM-Based Code Obfuscation" by K. Kuang et el. appeared in the 15th IEEE International Conference on Trust, Security and Privacy in Computing and Communications (TrustCom), 2016. 
 
 The extended version makes the several additional contributions over the conference paper:
 
